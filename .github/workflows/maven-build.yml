@@ -3,6 +3,9 @@ name: Maven Build
 on:
   pull_request:
 
+permissions:
+  statuses: write  # ✅ ステータス更新の権限を追加
+
 jobs:
   maven-build:
     runs-on: ubuntu-latest

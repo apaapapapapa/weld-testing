@@ -23,7 +23,7 @@
         <version.surefire.plugin>3.5.2</version.surefire.plugin>
         <version.wildfly>35.0.1.Final</version.wildfly>
         <version.deltaspike>2.0.0</version.deltaspike>
-        <version.weld>5.0.0.Beta1</version.weld>
+        <version.weld-junit>5.0.0.Beta1</version.weld-junit>
         <version.narayana>7.2.1.Final</version.narayana>
 
 
@@ -145,15 +145,9 @@
 
         <!-- weld-testing -->
         <dependency>
-            <groupId>org.jboss.weld.se</groupId>
-            <artifactId>weld-se-core</artifactId>
-            <version>${version.weld}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-junit5</artifactId>
-            <version>${version.weld}</version>
+            <version>${version.weld-junit}</version>
             <scope>test</scope>
         </dependency>
 

@@ -23,7 +23,7 @@
         <version.surefire.plugin>3.5.2</version.surefire.plugin>
         <version.wildfly>35.0.1.Final</version.wildfly>
         <version.deltaspike>2.0.0</version.deltaspike>
-        <version.weld>5.0.0.Beta1</version.weld>
+        <version.weld>6.0.1.Final</version.weld>
         <version.narayana>7.2.1.Final</version.narayana>
 
 

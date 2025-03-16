@@ -15,7 +15,7 @@
         <maven.compiler.source>17</maven.compiler.source>
 
         <version.bootable.jar>11.0.2.Final</version.bootable.jar>
-        <version.compiler.plugin>3.11.0</version.compiler.plugin>
+        <version.compiler.plugin>3.14.0</version.compiler.plugin>
 		<version.database.rider>1.44.0</version.database.rider>
         <version.junit>5.12.1</version.junit>
         <version.lombok>1.18.36</version.lombok>

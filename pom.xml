@@ -18,7 +18,7 @@
         <version.compiler.plugin>3.11.0</version.compiler.plugin>
 		<version.database.rider>1.44.0</version.database.rider>
         <version.junit>5.12.1</version.junit>
-        <version.lombok>1.18.34</version.lombok>
+        <version.lombok>1.18.36</version.lombok>
 		<version.mockito>5.14.1</version.mockito>
         <version.surefire.plugin>3.5.0</version.surefire.plugin>
         <version.wildfly>33.0.2.Final</version.wildfly>

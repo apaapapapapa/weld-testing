@@ -1,4 +1,6 @@
-# jaguar
+# weld-testing
+
+[weld-testing(Junit5)](https://github.com/weld/weld-testing/tree/master/junit5)を検証するためのプロジェクトです。
 
 ## 関連リンク
 

@@ -1,15 +1,10 @@
 name: Maven Build
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
+  maven-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,3 +20,18 @@ jobs:
 
       - name: Mavenでビルド
         run: mvn clean install
+
+      - name: ビルドステータスをGitHubに通知
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr_number = context.payload.pull_request.number;
+            github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: "success",
+              context: "maven-build",
+              description: "Mavenビルド成功"
+            });

@@ -24,7 +24,7 @@
         <version.wildfly>33.0.2.Final</version.wildfly>
         <version.deltaspike>2.0.0</version.deltaspike>
         <version.weld>5.0.0.Beta1</version.weld>
-        <version.narayana>7.0.2.Final</version.narayana>
+        <version.narayana>7.2.1.Final</version.narayana>
 
 
     </properties>

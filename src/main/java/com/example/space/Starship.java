@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 public class Starship { // We want to test this!
 
     @Inject
-    private WarpDrive engine;
+    Engine engine;
   
     public void start() {
       engine.start();

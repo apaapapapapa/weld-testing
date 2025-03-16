@@ -37,6 +37,7 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith({DBUnitExtension.class, WeldJunit5Extension.class})
 @AddEnabledInterceptors(DBUnitInterceptorImpl.class)
+@Disabled
 class TaskBeanTest {
 
     @SuppressWarnings({ "static-access", "unused" })

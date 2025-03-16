@@ -22,6 +22,7 @@
 		<version.mockito>5.16.1</version.mockito>
         <version.surefire.plugin>3.5.2</version.surefire.plugin>
         <version.wildfly>35.0.1.Final</version.wildfly>
+        <version.cdi-unit>5.0.0-EA7</version.cdi-unit>
         <version.deltaspike>2.0.0</version.deltaspike>
         <version.weld-junit>5.0.0.Beta1</version.weld-junit>
         <version.narayana>7.2.1.Final</version.narayana>
@@ -143,25 +144,17 @@
 			<scope>test</scope>
 		</dependency>
 
-        <!-- weld-testing -->
+        <!-- cdi-testing -->
         <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-junit5</artifactId>
+            <groupId>io.github.cdi-unit</groupId>
+            <artifactId>cdi-unit</artifactId>
+            <version>${version.cdi-unit}</version>
+            <scope>test</scope>
+        </dependency>
+            <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
             <version>${version.weld-junit}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- narayana -->
-        <dependency>
-            <groupId>org.jboss.narayana.jta</groupId>
-            <artifactId>cdi</artifactId>
-            <version>${version.narayana}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.narayana.jta</groupId>
-            <artifactId>narayana-jta</artifactId>
-            <version>${version.narayana}</version>
             <scope>test</scope>
         </dependency>
 

@@ -1,9 +1,6 @@
 package com.example.resource;
 
 import jakarta.annotation.Resource;
-import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.Vetoed;
-import jakarta.inject.Named;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,10 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import io.github.cdiunit.AdditionalClasses;
 import io.github.cdiunit.junit5.CdiJUnit5Extension;
 import io.github.cdiunit.resource.SupportResource;
 
 @ExtendWith(CdiJUnit5Extension.class)
+@AdditionalClasses(ResourceProducer.class)
 @SupportResource
 class ResourceTest {
 
@@ -40,7 +39,6 @@ class ResourceTest {
 
     @Resource
     public void setTypedAResource(AResource resource) {
-        // public to make it visible as Java Bean property to derive the name
         _typedAResource = resource;
     }
 
@@ -57,59 +55,6 @@ class ResourceTest {
         assertTrue(namedBResource instanceof BResource);
         assertTrue(_typedAResource instanceof AResourceExt);
         assertTrue(typedBResource instanceof BResourceExt);
-    }
-
-    interface AResourceType {
-    }
-
-    public interface BResourceType {
-    }
-
-    @Vetoed
-    public static class AResource implements AResourceType {
-    }
-
-    @Vetoed
-    static class BResource implements BResourceType {
-    }
-
-    @Vetoed
-    static class AResourceExt extends AResource {
-    }
-
-    @Vetoed
-    static class BResourceExt extends BResource {
-    }
-
-    @Produces
-    @Resource(name = "unnamedAResource")
-    AResourceType produceUnnamedAResource = new AResource();
-
-    @Produces
-    @Resource(name = "unnamedBResource")
-    BResourceType produceUnnamedBResource() {
-        return new BResource();
-    }
-
-    @Produces
-    @Named("namedAResource")
-    AResourceType produceNamedAResource = new AResource();
-
-    @Produces
-    @Resource
-    public BResourceType getNamedBResource() {
-        // public to make it visible as Java Bean property to derive the name
-        return new BResource();
-    }
-
-    @Produces
-    @Resource(name = "typedAResource", type = AResource.class)
-    AResourceExt produceTypedAResource = new AResourceExt();
-
-    @Produces
-    @Resource(name = "typedBResource", type = BResource.class)
-    BResourceExt produceTypedBResource() {
-        return new BResourceExt();
     }
 
 }

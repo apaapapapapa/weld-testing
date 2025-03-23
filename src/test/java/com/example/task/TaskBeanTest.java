@@ -2,7 +2,6 @@ package com.example.task;
 
 import com.example.util.MockFacesContext;
 import com.github.database.rider.core.api.dataset.DataSet;
-import com.github.database.rider.junit5.DBUnitExtension;
 import com.github.database.rider.junit5.api.DBRider;
 
 import io.github.cdiunit.AdditionalClasses;

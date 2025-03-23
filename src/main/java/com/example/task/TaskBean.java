@@ -40,7 +40,7 @@ public class TaskBean implements Serializable {
 
     public void delete() {
         try {
-            controller.delete(Long.valueOf(id));
+            controller.delete(Integer.parseInt(id));
             refresh();
             addMessage("Task " + id + " deleted");
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class TaskBean implements Serializable {
 
     public void update() {
         try {
-            controller.update(Long.valueOf(id), title);
+            controller.update(Integer.parseInt(id), title);
             refresh();
             addMessage("Task " + id + " updated");
         } catch (Exception e) {

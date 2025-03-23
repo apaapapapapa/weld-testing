@@ -27,7 +27,7 @@ public class TaskController {
 
     }
 
-    public Task delete(Long id) {
+    public Task delete(int id) {
 
         // IDが存在するか確認
         Optional<Task> task = taskRepository.findById(id);
@@ -42,7 +42,7 @@ public class TaskController {
         
     }
 
-    public Task update(Long id, String title) {
+    public Task update(int id, String title) {
         try {
             return taskRepository.update(id, title);
         } catch (EntityNotFoundException enf) {

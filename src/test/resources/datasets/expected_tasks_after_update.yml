@@ -1,5 +1,5 @@
 Task:
-  - id: 101
+  - id: 1
     title: "updatedTask"  # task1 が更新される
-  - id: 102
+  - id: 2
     title: "task2"

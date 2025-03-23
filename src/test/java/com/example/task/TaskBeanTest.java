@@ -5,25 +5,21 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
 import com.github.database.rider.junit5.api.DBRider;
 
+import io.github.cdiunit.AdditionalClasses;
 import io.github.cdiunit.InRequestScope;
-import io.github.cdiunit.deltaspike.SupportDeltaspikeData;
-import io.github.cdiunit.deltaspike.SupportDeltaspikeJpa;
 import io.github.cdiunit.junit5.CdiJUnit5Extension;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -33,22 +29,22 @@ import static org.mockito.Mockito.*;
 /**
  * TaskBean のテストクラス.
  */
-@SupportDeltaspikeJpa
-@SupportDeltaspikeData
-@ExtendWith({DBUnitExtension.class, CdiJUnit5Extension.class})
+@ExtendWith({CdiJUnit5Extension.class})
+@AdditionalClasses({TaskController.class, TaskRepository.class})
 @Disabled
 class TaskBeanTest {
-
-    @PersistenceContext
-    private EntityManagerFactory emf;
 
     @Produces
     @RequestScoped
     EntityManager createEntityManager() {
-      return emf.createEntityManager();
+        return Persistence.createEntityManagerFactory("TaskPersistenceUnit").createEntityManager();
     }
 
-    private TaskController taskController;
+    @Inject
+    TaskController taskController;
+
+    @Inject
+    TaskRepository taskRepository;
 
     private FacesContext facesContext;
 
@@ -76,7 +72,7 @@ class TaskBeanTest {
     @InRequestScope
     @Transactional
     @DBRider
-    @DataSet(value = "datasets/empty-tasks.yml", transactional = true) // テスト前に tasks テーブルを空にする
+    //@DataSet(value = "datasets/empty-tasks.yml", transactional = true) // テスト前に tasks テーブルを空にする
     void testAddTask() {
 
         // Arrange
@@ -150,17 +146,4 @@ class TaskBeanTest {
                 message.getSummary().equals("Task " + taskId + " updated")));
     }
 
-    /**
-     * @return EntityManager を生成するファクトリ関数.
-     */
-    static Function<InjectionPoint, Object> getPUFactory() {
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test-PU");
-        
-        return ip -> {
-            EntityManager em = emf.createEntityManager();
-            
-            return em; 
-        };
-    }
 }

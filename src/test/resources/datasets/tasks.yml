@@ -1,4 +1,4 @@
-tasks:
+task:
   - id: 1
     title: Task 1
   - id: 2

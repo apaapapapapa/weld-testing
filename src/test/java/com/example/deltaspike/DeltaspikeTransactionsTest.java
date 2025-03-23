@@ -37,5 +37,12 @@ class DeltaspikeTransactionsTest {
         Human human = new Human();
         assertDoesNotThrow(() -> er.save(human));
     }
+
+    @InRequestScope
+    @Transactional
+    @Test
+    void testSelectHuman() {
+        assertDoesNotThrow(() -> er.findAll());
+    }
     
 }

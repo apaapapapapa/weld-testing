@@ -1,59 +1,50 @@
 package com.example.task;
 
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.ejb.EJBException;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 
 @RequestScoped
-@Transactional
 public class TaskController {
 
-    @PersistenceContext
-    private EntityManager em;
+    @Inject
+    TaskRepository taskRepository;
 
     public List<Task> loadAll() {
-
-        List<Task> tasks = em.createNamedQuery(Task.FIND_ALL).getResultList();
-
-        return tasks;
+        return taskRepository.findAll();
     }
 
     public Task add(String title) {
+
         final Task newTask = new Task();
         newTask.setTitle(title);
-        
-        this.em.persist(newTask);
-        this.em.flush();
-        this.em.refresh(newTask);
-        
-        return newTask;
+
+        return taskRepository.create(newTask);
+
     }
 
     public Task delete(Long id) {
 
         // IDが存在するか確認
-        Task task = em.find(Task.class, id);
-        if (task == null) {
+        Optional<Task> task = taskRepository.findById(id);
+        
+        if (!task.isPresent()) {
             throw new EJBException("指定されたIDのタスクが見つかりません: " + id);
         }
         
-        Task ref = this.em.getReference(Task.class, id);
-        this.em.remove(ref);
+        taskRepository.delete(id);
 
-        return ref;
+        return task.get();
         
     }
 
     public Task update(Long id, String title) {
         try {
-            final Task ref = this.em.getReference(Task.class, id);
-            ref.setTitle(title);
-            return this.em.merge(ref);
+            return taskRepository.update(id, title);
         } catch (EntityNotFoundException enf) {
             throw new EJBException(enf);
         }

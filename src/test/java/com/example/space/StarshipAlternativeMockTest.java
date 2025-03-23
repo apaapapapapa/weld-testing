@@ -13,7 +13,7 @@ import jakarta.inject.Inject;
 
 @ExtendWith(CdiJUnit5Extension.class)
 @AdditionalClasses(WarpDrive.class) // Normally this implementation would be used
-class StarshipTranswarpDriveWithMockTest {
+class StarshipAlternativeMockTest {
 
   @Inject
   Starship starship;

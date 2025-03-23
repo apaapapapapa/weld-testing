@@ -1,10 +1,10 @@
-# weld-testing
+# cdi-unit
 
-[weld-testing(Junit5)](https://github.com/weld/weld-testing/tree/master/junit5)を検証するためのプロジェクトです。
+[cdi-unit](https://cdi-unit.github.io/cdi-unit/)を検証するためのプロジェクトです。
 
 ## 関連リンク
 
-* [サンプルコード](https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/11.0.2.Final/examples/jsf-ejb-jpa)
+* [cdi-unit](https://github.com/cdi-unit/cdi-unit/tree/master)
 
 * [DatabaseRider](https://database-rider.github.io/database-rider/1.44.0/documentation.html?theme=foundation#_introduction)
 
@@ -13,6 +13,8 @@
 * [Transaction管理1](https://in.relation.to/2019/01/23/testing-cdi-beans-and-persistence-layer-under-java-se/)
 
 * [Transaction管理2](https://stackoverflow.com/questions/59776325/weld-and-junit-no-transactionmanager)
+
+* [deltaspike](https://deltaspike.apache.org/documentation/test-control.html)
 
 ## 環境
 

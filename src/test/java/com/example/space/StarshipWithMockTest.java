@@ -10,7 +10,7 @@ import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 
 @ExtendWith(CdiJUnit5Extension.class)
-class StarshipWarpDriveWithMockTest {
+class StarshipWithMockTest {
 
   @Inject
   Starship starship;

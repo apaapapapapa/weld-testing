@@ -47,6 +47,27 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.9.3.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.arquillian</groupId>
+                <artifactId>wildfly-arquillian-bom</artifactId>
+                <version>5.1.0.Beta10</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-bom</artifactId>
+                <version>10.0.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -200,6 +221,17 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -215,6 +247,47 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.source}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>5.1.2.Final</version>
+                <configuration>
+                    <jboss-home>C:\Users\3kzey\OneDrive\デスクトップ\wildfly-35.0.1.Final</jboss-home>
+                    <provisioning-dir>C:\Users\3kzey\OneDrive\デスクトップ\wildfly-35.0.1.Final</provisioning-dir>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-ee-galleon-pack</artifactId>
+                        </feature-pack>
+                    </feature-packs>
+                    <channels>
+                        <channel>
+                            <manifest>
+                                <groupId>org.wildfly.channels</groupId>
+                                <artifactId>wildfly-ee</artifactId>
+                            </manifest>
+                        </channel>
+                    </channels>
+                    <layers>
+                        <layer>ee-core-profile-server</layer>
+                        <layer>jpa</layer>
+                        <layer>h2-default-datasource</layer>
+                        <layer>transactions</layer>
+                    </layers>
+                    <galleon-options>
+                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                    </galleon-options>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>provision-server</id>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

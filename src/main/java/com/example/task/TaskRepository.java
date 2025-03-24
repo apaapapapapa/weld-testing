@@ -9,13 +9,17 @@ import java.util.logging.Logger;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 
 @Stateless
+@NoArgsConstructor
+@Transactional
 public class TaskRepository {
 
     private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
-    private final EntityManager em;
+    private EntityManager em;
 
     @Inject
     public TaskRepository(EntityManager em) {

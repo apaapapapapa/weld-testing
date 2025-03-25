@@ -16,6 +16,8 @@
 
 * [deltaspike](https://deltaspike.apache.org/documentation/test-control.html)
 
+* [Arquillian](https://docs.jboss.org/arquillian/reference/1.0.0.Alpha1/en-US/html_single/)
+
 ## 環境
 
 <pre>

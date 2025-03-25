@@ -27,7 +27,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 @ExtendWith({CdiJUnit5Extension.class})
-@AdditionalClasses({TaskRepository.class, EntityManagerProducer.class})
+@AdditionalClasses({EntityManagerProducer.class})
 @DBRider
 class TaskRepositoryTest {
 

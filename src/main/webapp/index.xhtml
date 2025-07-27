@@ -14,8 +14,17 @@
             <div>
                 <h:outputLabel value="Title: "/>
                 <h:inputText id="inputTitle" value="#{taskBean.title}"/>
+                <br/>
+                <h:outputLabel value="Due Date: "/>
+                <h:inputText id="inputDueDate" value="#{taskBean.dueDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:inputText>
+                <br/>
+                <h:outputLabel value="Completed: "/>
+                <h:selectBooleanCheckbox id="inputCompleted" value="#{taskBean.completed}"/>
+                <br/>
                 <h:commandButton id="add" value="Add">
-                    <f:ajax execute="inputTitle" render="outputGroup" listener="#{taskBean.add}"/>
+                    <f:ajax execute="inputTitle inputDueDate inputCompleted" render="outputGroup" listener="#{taskBean.add}"/>
                 </h:commandButton>
             </div>
             <div>
@@ -35,8 +44,17 @@
                 <br/>
                 <h:outputLabel value="Title: "/>
                 <h:inputText id="updateTitle" value="#{taskBean.title}"/>
+                <br/>
+                <h:outputLabel value="Due Date: "/>
+                <h:inputText id="updateDueDate" value="#{taskBean.dueDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:inputText>
+                <br/>
+                <h:outputLabel value="Completed: "/>
+                <h:selectBooleanCheckbox id="updateCompleted" value="#{taskBean.completed}"/>
+                <br/>
                 <h:commandButton id="update" value="Update">
-                    <f:ajax execute="updateId updateTitle" render="outputGroup"
+                    <f:ajax execute="updateId updateTitle updateDueDate updateCompleted" render="outputGroup"
                             listener="#{taskBean.update}"/>
                 </h:commandButton>
             </div>

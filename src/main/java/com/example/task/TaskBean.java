@@ -18,6 +18,7 @@ public class TaskBean implements Serializable {
 
     private List<Task> allTasks;
 
+    @Inject
     private TaskController controller;
 
     @Getter
@@ -41,9 +42,7 @@ public class TaskBean implements Serializable {
         refresh();
     }
 
-    @Inject
-    public TaskBean(TaskController controller){
-        this.controller = controller;
+    public TaskBean() {
     }
 
     public void delete() {

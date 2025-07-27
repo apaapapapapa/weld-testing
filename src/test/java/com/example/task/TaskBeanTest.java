@@ -55,7 +55,16 @@ class TaskBeanTest {
         // Mock FacesContext
         facesContext = MockFacesContext.mock();
 
-        taskBean = new TaskBean(taskController);
+        taskBean = new TaskBean();
+        // フィールドインジェクションの代用
+        java.lang.reflect.Field controllerField = null;
+        try {
+            controllerField = TaskBean.class.getDeclaredField("controller");
+            controllerField.setAccessible(true);
+            controllerField.set(taskBean, taskController);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

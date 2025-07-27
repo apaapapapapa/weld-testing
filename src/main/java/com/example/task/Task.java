@@ -26,6 +26,6 @@ public class Task {
     private java.time.LocalDate dueDate;
 
     @Column
-    private boolean completed;
+    private Boolean completed = false;
 
 }

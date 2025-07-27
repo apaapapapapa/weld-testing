@@ -61,11 +61,28 @@ public class TaskRepository {
         return em.merge(ref);
     }
 
-    // 難易度3: 未完了タスクの件数を返す
     public long countIncompleteTasks() {
         logger.info("Counting incomplete tasks");
         return em.createQuery("SELECT COUNT(t) FROM Task t WHERE t.completed = false", Long.class)
                 .getSingleResult();
+    }
+
+    public List<Task> findByParentId(Integer parentId) {
+        logger.info("Getting tasks by parentId " + parentId);
+        if (parentId == null) {
+            return em.createQuery("SELECT t FROM Task t WHERE t.parent IS NULL", Task.class)
+                    .getResultList();
+        } else {
+            return em.createQuery("SELECT t FROM Task t WHERE t.parent.id = :parentId", Task.class)
+                    .setParameter("parentId", parentId)
+                    .getResultList();
+        }
+    }
+
+    public List<Task> findRootTasks() {
+        logger.info("Getting root tasks (parent is null)");
+        return em.createQuery("SELECT t FROM Task t WHERE t.parent IS NULL", Task.class)
+                .getResultList();
     }
     
 }

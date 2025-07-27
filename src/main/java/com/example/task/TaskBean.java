@@ -38,6 +38,24 @@ public class TaskBean implements Serializable {
     @Setter
     private boolean completed;
 
+    // サブタスク用: 親タスクID
+    @Getter
+    @Setter
+    private Integer parentId;
+
+    // サブタスク追加フォーム用プロパティ
+    @Getter
+    @Setter
+    private String subtaskTitle;
+
+    @Getter
+    @Setter
+    private java.time.LocalDate subtaskDueDate;
+
+    @Getter
+    @Setter
+    private boolean subtaskCompleted;
+
     @PostConstruct
     public void postConstruct() {
         refresh();
@@ -83,6 +101,41 @@ public class TaskBean implements Serializable {
             refresh();
             addMessage(TASK_PREFIX + id + " updated");
         }, "Error updating the Task by Id.");
+    }
+
+    // サブタスク追加
+    public void addSubtask() {
+        runWithMessage(() -> {
+            controller.addSubtask(parentId, subtaskTitle, subtaskDueDate, subtaskCompleted);
+            refresh();
+            addMessage("Subtask with title " + subtaskTitle + " created (parentId=" + parentId + ")");
+            // フォーム値クリア
+            subtaskTitle = null;
+            subtaskDueDate = null;
+            subtaskCompleted = false;
+            parentId = null;
+        }, "Error adding a new Subtask.");
+    }
+
+    // 指定した親タスクの子タスク一覧を取得
+    public List<Task> getSubtasks(int parentId) {
+        return controller.findSubtasks(parentId);
+    }
+
+    // Task型引数のオーバーロード（JSFバインディング用）
+    public List<Task> getSubtasks(Task parentTask) {
+        if (parentTask == null) return null;
+        return controller.findSubtasks(parentTask.getId());
+    }
+
+    // ルートタスク一覧を取得
+    public List<Task> getRootTasks() {
+        return controller.findRootTasks();
+    }
+
+    // JSFバインディング用（index.xhtmlの#{taskBean.rootTasks}）
+    public List<Task> getRootTasksProperty() {
+        return getRootTasks();
     }
 
     private void runWithMessage(Runnable action, String errorMessage) {

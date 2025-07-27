@@ -64,6 +64,32 @@ public class TaskController {
         return taskRepository.findAll();
     }
 
+    // サブタスク: 親タスクIDを指定して子タスクを追加
+    public Task addSubtask(int parentId, String title, java.time.LocalDate dueDate, boolean completed) {
+        validateTaskInput(title, dueDate);
+
+        Task parent = taskRepository.findById(parentId)
+            .orElseThrow(() -> new EJBException("親タスクが見つかりません: " + parentId));
+
+        Task subtask = new Task();
+        subtask.setTitle(title);
+        subtask.setDueDate(dueDate);
+        subtask.setCompleted(completed);
+        subtask.setParent(parent);
+
+        return taskRepository.create(subtask);
+    }
+
+    // サブタスク: 親タスクIDで子タスク一覧を取得
+    public List<Task> findSubtasks(int parentId) {
+        return taskRepository.findByParentId(parentId);
+    }
+
+    // サブタスク: ルートタスク（親がnull）のみ取得
+    public List<Task> findRootTasks() {
+        return taskRepository.findRootTasks();
+    }
+
     public Task add(String title, java.time.LocalDate dueDate, boolean completed) {
         validateTaskInput(title, dueDate);
 

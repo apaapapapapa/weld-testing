@@ -3,7 +3,8 @@
 <html lang="en" xml:lang="ja"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
   <h:head>
     <title>JSF Bootable Jar example</title>
     <link rel="stylesheet" href="#{request.contextPath}/resources/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
@@ -146,6 +147,98 @@
         </h:dataTable>
         <h:outputText rendered="#{empty taskBean.highRiskTasks}" value="遅延リスク高タスクはありません。" styleClass="text-muted"/>
       </div>
+      <!-- サブタスク階層表示 -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white section-header">
+          <i class="bi bi-diagram-3 section-icon"></i>
+          Task Hierarchy
+        </div>
+        <div class="card-body">
+          <ui:repeat value="#{taskBean.rootTasks}" var="parentTask">
+            <ul style="list-style-type: none; padding-left: 0;">
+              <li>
+                <span class="fw-bold">[#{parentTask.id}] #{parentTask.title}</span>
+                <span class="ms-2 text-muted">#{parentTask.dueDate}</span>
+                <span class="badge #{parentTask.completed ? 'bg-success' : 'bg-secondary'} ms-2">
+                  #{parentTask.completed ? 'Completed' : 'Incomplete'}
+                </span>
+                <!-- サブタスク再帰表示 -->
+                <ui:fragment rendered="#{not empty taskBean.getSubtasks(parentTask)}">
+                  <ul style="padding-left: 2em;">
+                    <ui:repeat value="#{taskBean.getSubtasks(parentTask)}" var="subTask">
+                      <li>
+                        <span>[#{subTask.id}] #{subTask.title}</span>
+                        <span class="ms-2 text-muted">#{subTask.dueDate}</span>
+                        <span class="badge #{subTask.completed ? 'bg-success' : 'bg-secondary'} ms-2">
+                          #{subTask.completed ? 'Completed' : 'Incomplete'}
+                        </span>
+                        <!-- さらにサブサブタスクがあれば再帰的に表示 -->
+                        <ui:fragment rendered="#{not empty taskBean.getSubtasks(subTask)}">
+                          <ul style="padding-left: 2em;">
+                            <ui:repeat value="#{taskBean.getSubtasks(subTask)}" var="subSubTask">
+                              <li>
+                                <span>[#{subSubTask.id}] #{subSubTask.title}</span>
+                                <span class="ms-2 text-muted">#{subSubTask.dueDate}</span>
+                                <span class="badge #{subSubTask.completed ? 'bg-success' : 'bg-secondary'} ms-2">
+                                  #{subSubTask.completed ? 'Completed' : 'Incomplete'}
+                                </span>
+                                <!-- 必要なら更に再帰化可能 -->
+                              </li>
+                            </ui:repeat>
+                          </ul>
+                        </ui:fragment>
+                      </li>
+                    </ui:repeat>
+                  </ul>
+                </ui:fragment>
+              </li>
+            </ul>
+          </ui:repeat>
+        </div>
+      </div>
+
+      <!-- サブタスク追加フォーム -->
+      <div class="card mb-4 shadow-sm border-success">
+        <div class="card-header bg-success text-white section-header">
+          <i class="bi bi-node-plus section-icon"></i>
+          Add Subtask
+        </div>
+        <div class="card-body">
+          <div class="row g-2 align-items-center mb-2">
+            <div class="col-auto">
+              <h:outputLabel value="Parent Task: " for="parentSelect"/>
+            </div>
+            <div class="col">
+              <h:selectOneMenu id="parentSelect" value="#{taskBean.parentId}" styleClass="form-select">
+                <f:selectItem itemLabel="(Root Task)" itemValue="#{null}" />
+                <f:selectItems value="#{taskBean.allTasks}" var="t" itemLabel="#{t.title}" itemValue="#{t.id}" />
+              </h:selectOneMenu>
+            </div>
+            <div class="col-auto">
+              <h:outputLabel value="Title: " for="subtaskTitle"/>
+            </div>
+            <div class="col">
+              <h:inputText id="subtaskTitle" value="#{taskBean.subtaskTitle}" styleClass="form-control" placeholder="Subtask Title"/>
+            </div>
+            <div class="col-auto">
+              <h:outputLabel value="Due Date: " for="subtaskDueDate"/>
+            </div>
+            <div class="col">
+              <h:inputText id="subtaskDueDate" value="#{taskBean.subtaskDueDate}" styleClass="form-control" placeholder="Due Date"/>
+            </div>
+            <div class="col-auto d-flex align-items-center">
+              <h:selectBooleanCheckbox id="subtaskCompleted" value="#{taskBean.subtaskCompleted}" styleClass="form-check-input"/>
+              <label for="subtaskCompleted" class="form-check-label ms-1">Completed</label>
+            </div>
+            <div class="col-auto">
+              <h:commandButton id="addSubtask" value="Add Subtask" styleClass="btn btn-success">
+                <f:ajax execute="parentSelect subtaskTitle subtaskDueDate subtaskCompleted" render="outputGroup" listener="#{taskBean.addSubtask}"/>
+              </h:commandButton>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h:panelGroup id="outputGroup" layout="block">
         <div class="card shadow-sm">
           <div class="card-header bg-secondary text-white section-header">

@@ -2,7 +2,6 @@ package com.example.task;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -91,7 +89,10 @@ class TaskRepositoryTest {
 
         entityManager.getTransaction().begin(); 
 
-        Task updatedTask = taskRepository.update(1, "updatedTask");
+        // 既存のdueDateとcompleted値を仮で指定（必要に応じて修正）
+        java.time.LocalDate dueDate = java.time.LocalDate.of(2025, 7, 31);
+        boolean completed = false;
+        Task updatedTask = taskRepository.update(1, "updatedTask", dueDate, completed);
         assertNotNull(updatedTask);
         assertEquals("updatedTask", updatedTask.getTitle());
 

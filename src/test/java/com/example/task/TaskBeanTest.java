@@ -110,7 +110,7 @@ class TaskBeanTest {
     void testDeleteTask() {
 
         // Arrange
-        String taskId = "1";
+        int taskId = 1;
         taskBean.setId(taskId);
 
         // Act
@@ -136,7 +136,7 @@ class TaskBeanTest {
     @DataSet(value = "datasets/existing-tasks.yml", transactional = true)
     void testUpdateTask() {
         // Arrange
-        String taskId = "1";
+        int taskId = 1;
         String updatedTitle = "更新されたタスクタイトル";
         taskBean.setId(taskId);
         taskBean.setTitle(updatedTitle);

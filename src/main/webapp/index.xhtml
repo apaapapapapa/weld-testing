@@ -16,9 +16,7 @@
                 <h:inputText id="inputTitle" value="#{taskBean.title}"/>
                 <br/>
                 <h:outputLabel value="Due Date: "/>
-                <h:inputText id="inputDueDate" value="#{taskBean.dueDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
-                </h:inputText>
+<h:inputText id="inputDueDate" value="#{taskBean.dueDate}"/>
                 <br/>
                 <h:outputLabel value="Completed: "/>
                 <h:selectBooleanCheckbox id="inputCompleted" value="#{taskBean.completed}"/>
@@ -46,9 +44,7 @@
                 <h:inputText id="updateTitle" value="#{taskBean.title}"/>
                 <br/>
                 <h:outputLabel value="Due Date: "/>
-                <h:inputText id="updateDueDate" value="#{taskBean.dueDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
-                </h:inputText>
+<h:inputText id="updateDueDate" value="#{taskBean.dueDate}"/>
                 <br/>
                 <h:outputLabel value="Completed: "/>
                 <h:selectBooleanCheckbox id="updateCompleted" value="#{taskBean.completed}"/>
@@ -70,6 +66,16 @@
                 <h:column>
                     <f:facet name="header">Title</f:facet>
                     #{row.title}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Due Date</f:facet>
+                    #{row.dueDate}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Completed</f:facet>
+                    #{row.completed}
                 </h:column>
             </h:dataTable>
 

@@ -19,17 +19,7 @@ public class TaskController {
     }
 
     public Task add(String title, java.time.LocalDate dueDate, boolean completed) {
-        // 難易度1: タイトルの空チェック
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("タイトルは必須です。");
-        }
-        // 難易度2: 期限の過去日付チェック
-        if (dueDate == null) {
-            throw new IllegalArgumentException("期限(dueDate)は必須です。");
-        }
-        if (dueDate.isBefore(java.time.LocalDate.now())) {
-            throw new IllegalArgumentException("期限(dueDate)は今日以降の日付を指定してください。");
-        }
+        validateTaskInput(title, dueDate);
 
         final Task newTask = new Task();
         newTask.setTitle(title);
@@ -55,21 +45,23 @@ public class TaskController {
     }
 
     public Task update(int id, String title, java.time.LocalDate dueDate, boolean completed) {
-        // 難易度1: タイトルの空チェック
+        validateTaskInput(title, dueDate);
+        try {
+            return taskRepository.update(id, title, dueDate, completed);
+        } catch (EntityNotFoundException enf) {
+            throw new EJBException(enf);
+        }
+    }
+
+    private void validateTaskInput(String title, java.time.LocalDate dueDate) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("タイトルは必須です。");
         }
-        // 難易度2: 期限の過去日付チェック
         if (dueDate == null) {
             throw new IllegalArgumentException("期限(dueDate)は必須です。");
         }
         if (dueDate.isBefore(java.time.LocalDate.now())) {
             throw new IllegalArgumentException("期限(dueDate)は今日以降の日付を指定してください。");
-        }
-        try {
-            return taskRepository.update(id, title, dueDate, completed);
-        } catch (EntityNotFoundException enf) {
-            throw new EJBException(enf);
         }
     }
 }

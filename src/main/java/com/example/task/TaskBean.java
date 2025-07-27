@@ -27,7 +27,7 @@ public class TaskBean implements Serializable {
 
     @Getter
     @Setter
-    private String id;
+    private int id;
 
     @Getter
     @Setter
@@ -46,32 +46,34 @@ public class TaskBean implements Serializable {
     }
 
     public void delete() {
-        try {
-            controller.delete(Integer.parseInt(id));
+        runWithMessage(() -> {
+            controller.delete(id);
             refresh();
             addMessage("Task " + id + " deleted");
-        } catch (Exception e) {
-            addMessage("Error deleting the Task by Id. " + e.getLocalizedMessage());
-        }
+        }, "Error deleting the Task by Id.");
     }
 
     public void add() {
-        try {
+        runWithMessage(() -> {
             controller.add(title, dueDate, completed);
             refresh();
             addMessage("Task with title " + title + " created");
-        } catch (Exception e) {
-            addMessage("Error adding a new Task. " + e.getLocalizedMessage());
-        }
+        }, "Error adding a new Task.");
     }
 
     public void update() {
-        try {
-            controller.update(Integer.parseInt(id), title, dueDate, completed);
+        runWithMessage(() -> {
+            controller.update(id, title, dueDate, completed);
             refresh();
             addMessage("Task " + id + " updated");
+        }, "Error updating the Task by Id.");
+    }
+
+    private void runWithMessage(Runnable action, String errorMessage) {
+        try {
+            action.run();
         } catch (Exception e) {
-            addMessage("Error updating the Task by Id. " + e.getLocalizedMessage());
+            addMessage(errorMessage + " " + e.getLocalizedMessage());
         }
     }
 

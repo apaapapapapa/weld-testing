@@ -10,20 +10,23 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 
 @Stateless
-@NoArgsConstructor
 @Transactional
 public class TaskRepository {
 
     private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
-    private EntityManager em;
+    private final EntityManager em;
 
     @Inject
     public TaskRepository(EntityManager em) {
         this.em = em;
+    }
+
+    // Default public constructor required by EJB spec
+    public TaskRepository() {
+        this.em = null;
     }
 
     public List<Task> findAll() {
@@ -47,13 +50,6 @@ public class TaskRepository {
         var task = findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Invalid task Id:" + id));
         em.remove(task);
-    }
-
-    public Task update(int id, String title) {
-        logger.log(Level.INFO, "Updating task {0}", title);
-        Task ref = em.getReference(Task.class, id);
-        ref.setTitle(title);
-        return em.merge(ref);
     }
 
     public Task update(int id, String title, java.time.LocalDate dueDate, boolean completed) {

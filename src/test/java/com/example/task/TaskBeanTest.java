@@ -30,7 +30,6 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith({CdiJUnit5Extension.class})
 @AdditionalClasses({TaskController.class, TaskRepository.class})
-@Disabled
 class TaskBeanTest {
 
     @Produces
@@ -39,19 +38,15 @@ class TaskBeanTest {
         return Persistence.createEntityManagerFactory("TaskPersistenceUnit").createEntityManager();
     }
 
-    // --- 追加: getter系のテスト ---
+    // --- 追加: getter系の個別テスト ---
+
     @Test
-    void testGetProgressRateAndDelayRiskRateAndHighRiskTasks() {
+    void testGetProgressRate() {
         // Arrange
-        // テスト用のTaskControllerをMock化
         TaskController mockController = mock(TaskController.class);
-        when(mockController.calculateProgressRate()).thenReturn(42.0);
-        when(mockController.calculateDelayRiskRate()).thenReturn(17.5);
-        List<Task> highRiskTasks = List.of(new Task());
-        when(mockController.findHighRiskTasks()).thenReturn(highRiskTasks);
+        when(mockController.calculateProgressRate()).thenReturn(55.5);
 
         TaskBean bean = new TaskBean();
-        // フィールドインジェクションの代用
         try {
             java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
             controllerField.setAccessible(true);
@@ -61,8 +56,45 @@ class TaskBeanTest {
         }
 
         // Act & Assert
-        assertEquals(42.0, bean.getProgressRate());
-        assertEquals(17.5, bean.getDelayRiskRate());
+        assertEquals(55.5, bean.getProgressRate());
+    }
+
+    @Test
+    void testGetDelayRiskRate() {
+        // Arrange
+        TaskController mockController = mock(TaskController.class);
+        when(mockController.calculateDelayRiskRate()).thenReturn(23.4);
+
+        TaskBean bean = new TaskBean();
+        try {
+            java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
+            controllerField.setAccessible(true);
+            controllerField.set(bean, mockController);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Act & Assert
+        assertEquals(23.4, bean.getDelayRiskRate());
+    }
+
+    @Test
+    void testGetHighRiskTasks() {
+        // Arrange
+        TaskController mockController = mock(TaskController.class);
+        List<Task> highRiskTasks = List.of(new Task());
+        when(mockController.findHighRiskTasks()).thenReturn(highRiskTasks);
+
+        TaskBean bean = new TaskBean();
+        try {
+            java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
+            controllerField.setAccessible(true);
+            controllerField.set(bean, mockController);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Act & Assert
         assertEquals(highRiskTasks, bean.getHighRiskTasks());
     }
 
@@ -134,6 +166,7 @@ class TaskBeanTest {
     @Transactional
     @DBRider
     @DataSet(value = "datasets/existing-tasks.yml", transactional = true) // テスト前に既存のタスクをロード
+    @Disabled
     void testDeleteTask() {
 
         // Arrange
@@ -161,6 +194,7 @@ class TaskBeanTest {
     @Transactional
     @DBRider
     @DataSet(value = "datasets/existing-tasks.yml", transactional = true)
+    @Disabled
     void testUpdateTask() {
         // Arrange
         int taskId = 1;

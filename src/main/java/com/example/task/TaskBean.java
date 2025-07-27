@@ -111,4 +111,18 @@ public class TaskBean implements Serializable {
     private void addMessage(String message) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(message));
     }
+
+    /**
+     * 遅延リスク高タスクの割合（%）を返す
+     */
+    public double getDelayRiskRate() {
+        return controller.calculateDelayRiskRate();
+    }
+
+    /**
+     * 遅延リスク高タスクのリストを返す
+     */
+    public List<Task> getHighRiskTasks() {
+        return controller.findHighRiskTasks();
+    }
 }

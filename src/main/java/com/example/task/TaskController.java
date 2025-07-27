@@ -22,6 +22,44 @@ public class TaskController {
         this.taskRepository = null;
     }
 
+    /**
+     * 遅延リスク高タスクの割合（%）を返す
+     * ・未完了
+     * ・期日が今日から3日以内
+     */
+    public double calculateDelayRiskRate() {
+        List<Task> allTasks = taskRepository.findAll();
+        if (allTasks.isEmpty()) {
+            return 0.0;
+        }
+        long highRiskCount = allTasks.stream()
+            .filter(t -> Boolean.FALSE.equals(t.getCompleted()))
+            .filter(t -> {
+                java.time.LocalDate today = java.time.LocalDate.now();
+                java.time.LocalDate due = t.getDueDate();
+                return due != null && !due.isBefore(today) && !due.isAfter(today.plusDays(3));
+            })
+            .count();
+        return (highRiskCount * 100.0) / allTasks.size();
+    }
+
+    /**
+     * 遅延リスク高タスクのリストを返す
+     * ・未完了
+     * ・期日が今日から3日以内
+     */
+    public List<Task> findHighRiskTasks() {
+        List<Task> allTasks = taskRepository.findAll();
+        java.time.LocalDate today = java.time.LocalDate.now();
+        return allTasks.stream()
+            .filter(t -> Boolean.FALSE.equals(t.getCompleted()))
+            .filter(t -> {
+                java.time.LocalDate due = t.getDueDate();
+                return due != null && !due.isBefore(today) && !due.isAfter(today.plusDays(3));
+            })
+            .toList();
+    }
+
     public List<Task> loadAll() {
         return taskRepository.findAll();
     }

@@ -124,6 +124,28 @@
           </span>
         </div>
       </div>
+      <!-- 遅延リスク高タスク率の表示 -->
+      <div class="mb-2">
+        <div class="#{taskBean.delayRiskRate ge 30.0 ? 'alert alert-danger' : (taskBean.delayRiskRate ge 10.0 ? 'alert alert-warning' : 'alert alert-success')} d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          遅延リスク高タスク率: 
+          <span class="fw-bold ms-1">#{taskBean.delayRiskRate}%</span>
+        </div>
+      </div>
+      <!-- 遅延リスク高タスク一覧の表示 -->
+      <div class="table-responsive mb-4">
+        <h:dataTable value="#{taskBean.highRiskTasks}" var="task" styleClass="table table-bordered table-danger align-middle">
+          <h:column>
+            <f:facet name="header">タイトル</f:facet>
+            #{task.title}
+          </h:column>
+          <h:column>
+            <f:facet name="header">期日</f:facet>
+            #{task.dueDate}
+          </h:column>
+        </h:dataTable>
+        <h:outputText rendered="#{empty taskBean.highRiskTasks}" value="遅延リスク高タスクはありません。" styleClass="text-muted"/>
+      </div>
       <h:panelGroup id="outputGroup" layout="block">
         <div class="card shadow-sm">
           <div class="card-header bg-secondary text-white section-header">

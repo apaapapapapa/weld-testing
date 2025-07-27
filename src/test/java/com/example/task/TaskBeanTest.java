@@ -39,6 +39,33 @@ class TaskBeanTest {
         return Persistence.createEntityManagerFactory("TaskPersistenceUnit").createEntityManager();
     }
 
+    // --- 追加: getter系のテスト ---
+    @Test
+    void testGetProgressRateAndDelayRiskRateAndHighRiskTasks() {
+        // Arrange
+        // テスト用のTaskControllerをMock化
+        TaskController mockController = mock(TaskController.class);
+        when(mockController.calculateProgressRate()).thenReturn(42.0);
+        when(mockController.calculateDelayRiskRate()).thenReturn(17.5);
+        List<Task> highRiskTasks = List.of(new Task());
+        when(mockController.findHighRiskTasks()).thenReturn(highRiskTasks);
+
+        TaskBean bean = new TaskBean();
+        // フィールドインジェクションの代用
+        try {
+            java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
+            controllerField.setAccessible(true);
+            controllerField.set(bean, mockController);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Act & Assert
+        assertEquals(42.0, bean.getProgressRate());
+        assertEquals(17.5, bean.getDelayRiskRate());
+        assertEquals(highRiskTasks, bean.getHighRiskTasks());
+    }
+
     @Inject
     TaskController taskController;
 

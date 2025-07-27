@@ -1,5 +1,7 @@
 package com.example.task;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.container.annotation.ArquillianTest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -39,7 +41,7 @@ class ArqTest {
     void addTask() {
         final Task task = new Task();
         task.setTitle("This the test tasks description");
-        taskRepository.create(task);
+        assertDoesNotThrow(() -> taskRepository.create(task));
     }
     
 }

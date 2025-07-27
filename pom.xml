@@ -1,34 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
     <artifactId>weld-testing</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>weld-testing</name>
-    <url>http://maven.apache.org</url>
+    <name>task-app</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
-
-        <version.bootable.jar>12.0.0.Final</version.bootable.jar>
         <version.compiler.plugin>3.14.0</version.compiler.plugin>
-		<version.database.rider>1.44.0</version.database.rider>
+        <version.database.rider>1.44.0</version.database.rider>
         <version.junit>5.12.1</version.junit>
         <version.lombok>1.18.36</version.lombok>
-		<version.mockito>5.16.1</version.mockito>
+        <version.mockito>5.16.1</version.mockito>
         <version.surefire.plugin>3.5.2</version.surefire.plugin>
         <version.wildfly>35.0.1.Final</version.wildfly>
         <version.cdi-unit>5.0.0-EA7</version.cdi-unit>
         <version.deltaspike>2.0.0</version.deltaspike>
         <version.weld-junit>5.0.0.Beta1</version.weld-junit>
         <version.weld>5.1.5.Final</version.weld>
-        <version.narayana>7.2.1.Final</version.narayana>
-
-
     </properties>
 
     <dependencyManagement>
@@ -68,17 +62,10 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-        <!-- Bootstrap WebJar -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>5.3.3</version>
-        </dependency>
-    </dependencies>
+        </dependencies>
     </dependencyManagement>
 
     <dependencies>
-
         <!-- database -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -86,39 +73,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- JakartaEE -->
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-			<groupId>jakarta.ejb</groupId>
-			<artifactId>jakarta.ejb-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.annotation</groupId>
-			<artifactId>jakarta.annotation-api</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>jakarta.ejb</groupId>
-            <artifactId>jakarta.ejb-api</artifactId>
-        </dependency>
-		<dependency>
-			<groupId>jakarta.faces</groupId>
-			<artifactId>jakarta.faces-api</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>jakarta.inject</groupId>
-            <artifactId>jakarta.inject-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-        </dependency>
+        <!-- JakartaEE (provided) -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
@@ -132,7 +87,7 @@
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
-            <dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <scope>test</scope>
@@ -155,48 +110,48 @@
 
         <!-- Lombok -->
         <dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>${version.lombok}</version>
-			<scope>provided</scope>
-		</dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${version.lombok}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- Mockito -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${version.mockito}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>${version.mockito}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- DatabaseRider -->
-		<dependency>
-			<groupId>com.github.database-rider</groupId>
-			<artifactId>rider-junit5</artifactId>
-			<version>${version.database.rider}</version>
-            <classifier>jakarta</classifier>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.database-rider</groupId>
-			<artifactId>rider-core</artifactId>
-			<version>${version.database.rider}</version>
-            <classifier>jakarta</classifier>
-			<scope>test</scope>
-		</dependency>
+        <!-- Mockito -->
         <dependency>
-			<groupId>com.github.database-rider</groupId>
-			<artifactId>rider-cdi</artifactId>
-			<version>${version.database.rider}</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${version.mockito}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${version.mockito}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- DatabaseRider -->
+        <dependency>
+            <groupId>com.github.database-rider</groupId>
+            <artifactId>rider-junit5</artifactId>
+            <version>${version.database.rider}</version>
             <classifier>jakarta</classifier>
-			<scope>test</scope>
-		</dependency>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.database-rider</groupId>
+            <artifactId>rider-core</artifactId>
+            <version>${version.database.rider}</version>
+            <classifier>jakarta</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.database-rider</groupId>
+            <artifactId>rider-cdi</artifactId>
+            <version>${version.database.rider}</version>
+            <classifier>jakarta</classifier>
+            <scope>test</scope>
+        </dependency>
 
         <!-- cdi-testing -->
         <dependency>
@@ -218,20 +173,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- deltaspike -->
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-data-module-api</artifactId>
-            <version>${version.deltaspike}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-data-module-impl</artifactId>
-            <version>${version.deltaspike}</version>
-            <scope>runtime</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
@@ -243,20 +184,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Resteasy Core (JAX-RS Implementation) -->
+        <!-- Bootstrap WebJar -->
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-core</artifactId>
-            <version>7.0.0.Beta1</version>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>5.3.3</version>
         </dependency>
-
-        <!-- Resteasy Servlet Integration -->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-servlet-initializer</artifactId>
-            <version>7.0.0.Beta1</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -277,37 +210,37 @@
     </build>
 
     <profiles>
-		<profile>
+        <profile>
             <id>wildfly-bootable-jar</id>
-			<build>
-				<finalName>${project.artifactId}</finalName>
-				<plugins>
-					<plugin>
-						<groupId>org.wildfly.plugins</groupId>
-						<artifactId>wildfly-jar-maven-plugin</artifactId>
-						<version>${version.bootable.jar}</version>
-						 <configuration>
-							<feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
-							<layers>
-								<layer>ejb-lite</layer>
-								<layer>jpa</layer>
-								<layer>jsf</layer>
-								<layer>h2-driver</layer>
-							</layers>
-							<plugin-options>
-								<jboss-fork-embedded>true</jboss-fork-embedded>
-							</plugin-options>
-						</configuration>
-						<executions>
-							<execution>
-								<goals>
-									<goal>package</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
+            <build>
+                <finalName>${project.artifactId}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-jar-maven-plugin</artifactId>
+                        <version>12.0.0.Final</version>
+                        <configuration>
+                            <feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
+                            <layers>
+                                <layer>ejb-lite</layer>
+                                <layer>jpa</layer>
+                                <layer>jsf</layer>
+                                <layer>h2-driver</layer>
+                            </layers>
+                            <plugin-options>
+                                <jboss-fork-embedded>true</jboss-fork-embedded>
+                            </plugin-options>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>package</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

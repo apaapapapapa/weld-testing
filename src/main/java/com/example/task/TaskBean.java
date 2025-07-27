@@ -16,6 +16,8 @@ import lombok.Setter;
 @ViewScoped
 public class TaskBean implements Serializable {
 
+    private static final String TASK_PREFIX = "Task ";
+
     private transient List<Task> allTasks;
 
     private final TaskController controller;
@@ -55,7 +57,15 @@ public class TaskBean implements Serializable {
         runWithMessage(() -> {
             controller.delete(id);
             refresh();
-            addMessage("Task " + id + " deleted");
+            addMessage(TASK_PREFIX + id + " deleted");
+        }, "Error deleting the Task by Id.");
+    }
+
+    public void deleteById(int id) {
+        runWithMessage(() -> {
+            controller.delete(id);
+            refresh();
+            addMessage(TASK_PREFIX + id + " deleted");
         }, "Error deleting the Task by Id.");
     }
 
@@ -71,7 +81,7 @@ public class TaskBean implements Serializable {
         runWithMessage(() -> {
             controller.update(id, title, dueDate, completed);
             refresh();
-            addMessage("Task " + id + " updated");
+            addMessage(TASK_PREFIX + id + " updated");
         }, "Error updating the Task by Id.");
     }
 

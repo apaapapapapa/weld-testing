@@ -68,7 +68,13 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-        </dependencies>
+        <!-- Bootstrap WebJar -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>5.3.3</version>
+        </dependency>
+    </dependencies>
     </dependencyManagement>
 
     <dependencies>

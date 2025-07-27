@@ -6,80 +6,159 @@
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>JSF Bootable Jar example</title>
+    <link rel="stylesheet" href="#{request.contextPath}/resources/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+    <script src="#{request.contextPath}/resources/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <h:outputStylesheet library="css" name="styles.css"/>
 </h:head>
 <h:body>
-    <div class="main">
+    <div class="container mt-4">
         <h:form id="form">
-            <div>
-                <h:outputLabel value="Title: "/>
-                <h:inputText id="inputTitle" value="#{taskBean.title}"/>
-                <br/>
-                <h:outputLabel value="Due Date: "/>
-<h:inputText id="inputDueDate" value="#{taskBean.dueDate}"/>
-                <br/>
-                <h:outputLabel value="Completed: "/>
-                <h:selectBooleanCheckbox id="inputCompleted" value="#{taskBean.completed}"/>
-                <br/>
-                <h:commandButton id="add" value="Add">
-                    <f:ajax execute="inputTitle inputDueDate inputCompleted" render="outputGroup" listener="#{taskBean.add}"/>
-                </h:commandButton>
+            <div class="card mb-4 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white section-header">
+                    <i class="bi bi-plus-circle section-icon"></i>
+                    Add Task
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Title: " for="inputTitle"/>
+                        </div>
+                        <div class="col">
+                            <h:inputText id="inputTitle" value="#{taskBean.title}" styleClass="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Due Date: " for="inputDueDate"/>
+                        </div>
+                        <div class="col">
+                            <h:inputText id="inputDueDate" value="#{taskBean.dueDate}" styleClass="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Completed: " for="inputCompleted"/>
+                        </div>
+                        <div class="col">
+                            <h:selectBooleanCheckbox id="inputCompleted" value="#{taskBean.completed}" styleClass="form-check-input"/>
+                        </div>
+                    </div>
+                    <h:commandButton id="add" value="Add" styleClass="btn btn-primary">
+                        <f:ajax execute="inputTitle inputDueDate inputCompleted" render="outputGroup" listener="#{taskBean.add}"/>
+                    </h:commandButton>
+                </div>
             </div>
-            <div>
-                <h:outputLabel value="Task Id: "/>
-                <h:inputText id="delTitle" value="#{taskBean.id}">
-                    <f:validateLongRange minimum="1" maximum="99"/>
-                </h:inputText>
-                <h:commandButton id="del" value="Delete">
-                    <f:ajax execute="delTitle" render="outputGroup" listener="#{taskBean.delete}"/>
-                </h:commandButton>
+            <div class="card mb-4 shadow-sm border-danger">
+                <div class="card-header bg-danger text-white section-header">
+                    <i class="bi bi-trash section-icon"></i>
+                    Delete Task
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Task Id: " for="delTitle"/>
+                        </div>
+                        <div class="col">
+                            <h:inputText id="delTitle" value="#{taskBean.id}" styleClass="form-control">
+                                <f:validateLongRange minimum="1" maximum="99"/>
+                            </h:inputText>
+                        </div>
+                    </div>
+                    <h:commandButton id="del" value="Delete" styleClass="btn btn-danger">
+                        <f:ajax execute="delTitle" render="outputGroup" listener="#{taskBean.delete}"/>
+                    </h:commandButton>
+                </div>
             </div>
-            <div>
-                <h:outputLabel value="Task Id: "/>
-                <h:inputText id="updateId" value="#{taskBean.id}">
-                    <f:validateLongRange minimum="1" maximum="99"/>
-                </h:inputText>
-                <br/>
-                <h:outputLabel value="Title: "/>
-                <h:inputText id="updateTitle" value="#{taskBean.title}"/>
-                <br/>
-                <h:outputLabel value="Due Date: "/>
-<h:inputText id="updateDueDate" value="#{taskBean.dueDate}"/>
-                <br/>
-                <h:outputLabel value="Completed: "/>
-                <h:selectBooleanCheckbox id="updateCompleted" value="#{taskBean.completed}"/>
-                <br/>
-                <h:commandButton id="update" value="Update">
-                    <f:ajax execute="updateId updateTitle updateDueDate updateCompleted" render="outputGroup"
-                            listener="#{taskBean.update}"/>
-                </h:commandButton>
+            <div class="card mb-4 shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark section-header">
+                    <i class="bi bi-pencil-square section-icon"></i>
+                    Update Task
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Task Id: " for="updateId"/>
+                        </div>
+                        <div class="col">
+                            <h:inputText id="updateId" value="#{taskBean.id}" styleClass="form-control">
+                                <f:validateLongRange minimum="1" maximum="99"/>
+                            </h:inputText>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Title: " for="updateTitle"/>
+                        </div>
+                        <div class="col">
+                            <h:inputText id="updateTitle" value="#{taskBean.title}" styleClass="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Due Date: " for="updateDueDate"/>
+                        </div>
+                        <div class="col">
+                            <h:inputText id="updateDueDate" value="#{taskBean.dueDate}" styleClass="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-auto">
+                            <h:outputLabel value="Completed: " for="updateCompleted"/>
+                        </div>
+                        <div class="col">
+                            <h:selectBooleanCheckbox id="updateCompleted" value="#{taskBean.completed}" styleClass="form-check-input"/>
+                        </div>
+                    </div>
+                    <h:commandButton id="update" value="Update" styleClass="btn btn-warning">
+                        <f:ajax execute="updateId updateTitle updateDueDate updateCompleted" render="outputGroup"
+                                listener="#{taskBean.update}"/>
+                    </h:commandButton>
+                </div>
             </div>
         </h:form>
 
         <h:panelGroup id="outputGroup" layout="block">
-            <h:dataTable id="taskTable" value="#{taskBean.allTasks}" var="row" title="Task List" styleClass="results">
-                <h:column>
-                    <f:facet name="header">ID</f:facet>
-                    #{row.id}
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">Title</f:facet>
-                    #{row.title}
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">Due Date</f:facet>
-                    #{row.dueDate}
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">Completed</f:facet>
-                    #{row.completed}
-                </h:column>
-            </h:dataTable>
-
-            <h:messages id="messages"/>
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white section-header">
+                    <i class="bi bi-list-task section-icon"></i>
+                    Task List
+                </div>
+                <div class="card-body p-0">
+                    <h:dataTable id="taskTable" value="#{taskBean.allTasks}" var="row" title="Task List" styleClass="table table-striped table-bordered mb-0 align-middle">
+                        <h:column>
+                            <f:facet name="header">ID</f:facet>
+                            #{row.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Title</f:facet>
+                            #{row.title}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Due Date</f:facet>
+                            #{row.dueDate}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Completed</f:facet>
+                            <span class="#{row.completed ? 'badge badge-completed' : 'badge badge-incomplete'}">
+                                #{row.completed ? 'Completed' : 'Incomplete'}
+                            </span>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Actions</f:facet>
+                            <div class="table-actions">
+                                <button type="button" class="btn btn-sm btn-outline-warning" title="Edit" disabled>
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" disabled>
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </div>
+            <h:messages id="messages" styleClass="alert alert-info mt-3"/>
         </h:panelGroup>
     </div>
 </h:body>

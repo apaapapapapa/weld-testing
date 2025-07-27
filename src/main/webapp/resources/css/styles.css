@@ -41,3 +41,42 @@ div.main {
     padding: 2%;
     max-width: 800px;
 }
+
+/* --- Custom styles for rich UI --- */
+.section-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+.badge-completed {
+    background-color: #28a745 !important;
+    color: #fff !important;
+}
+.badge-incomplete {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+@media (max-width: 600px) {
+    .section-header {
+        font-size: 1rem;
+    }
+    .card {
+        margin-bottom: 1rem !important;
+    }
+    .table-actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+/* --- End custom styles --- */

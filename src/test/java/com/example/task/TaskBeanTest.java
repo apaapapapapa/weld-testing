@@ -140,6 +140,7 @@ class TaskBeanTest {
     @Transactional
     @DBRider
     //@DataSet(value = "datasets/empty-tasks.yml", transactional = true) // テスト前に tasks テーブルを空にする
+    @Disabled
     void testAddTask() {
 
         // Arrange

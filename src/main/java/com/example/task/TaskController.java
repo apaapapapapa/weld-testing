@@ -74,7 +74,9 @@ public class TaskController {
         if (allTasks.isEmpty()) {
             return 0.0;
         }
-        long completedCount = allTasks.stream().filter(Task::getCompleted).count();
+        long completedCount = allTasks.stream()
+            .filter(t -> Boolean.TRUE.equals(t.getCompleted()))
+            .count();
         return (completedCount * 100.0) / allTasks.size();
     }
 }

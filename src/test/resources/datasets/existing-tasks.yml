@@ -1,5 +1,7 @@
 task:
   - id: 1
     title: "初期タスク1"
+    completed: false
   - id: 2
     title: "初期タスク2"
+    completed: false

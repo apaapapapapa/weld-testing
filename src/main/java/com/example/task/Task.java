@@ -22,4 +22,10 @@ public class Task {
     @Column
     private String title;
 
+    @Column
+    private java.time.LocalDate dueDate;
+
+    @Column
+    private boolean completed;
+
 }

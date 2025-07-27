@@ -55,5 +55,21 @@ public class TaskRepository {
         ref.setTitle(title);
         return em.merge(ref);
     }
+
+    public Task update(int id, String title, java.time.LocalDate dueDate, boolean completed) {
+        logger.log(Level.INFO, "Updating task {0} (full update)", title);
+        Task ref = em.getReference(Task.class, id);
+        ref.setTitle(title);
+        ref.setDueDate(dueDate);
+        ref.setCompleted(completed);
+        return em.merge(ref);
+    }
+
+    // 難易度3: 未完了タスクの件数を返す
+    public long countIncompleteTasks() {
+        logger.info("Counting incomplete tasks");
+        return em.createQuery("SELECT COUNT(t) FROM Task t WHERE t.completed = false", Long.class)
+                .getSingleResult();
+    }
     
 }

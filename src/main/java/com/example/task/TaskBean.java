@@ -23,10 +23,18 @@ public class TaskBean implements Serializable {
     @Getter
     @Setter
     private String title;
-    
+
     @Getter
     @Setter
     private String id;
+
+    @Getter
+    @Setter
+    private java.time.LocalDate dueDate;
+
+    @Getter
+    @Setter
+    private boolean completed;
 
     @PostConstruct
     public void postConstruct() {
@@ -50,7 +58,7 @@ public class TaskBean implements Serializable {
 
     public void add() {
         try {
-            controller.add(title);
+            controller.add(title, dueDate, completed);
             refresh();
             addMessage("Task with title " + title + " created");
         } catch (Exception e) {
@@ -60,7 +68,7 @@ public class TaskBean implements Serializable {
 
     public void update() {
         try {
-            controller.update(Integer.parseInt(id), title);
+            controller.update(Integer.parseInt(id), title, dueDate, completed);
             refresh();
             addMessage("Task " + id + " updated");
         } catch (Exception e) {

@@ -262,47 +262,6 @@
                     <target>${maven.compiler.source}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>5.1.2.Final</version>
-                <configuration>
-                    <jboss-home>C:\Users\3kzey\OneDrive\デスクトップ\wildfly-35.0.1.Final</jboss-home>
-                    <provisioning-dir>C:\Users\3kzey\OneDrive\デスクトップ\wildfly-35.0.1.Final</provisioning-dir>
-                    <feature-packs>
-                        <feature-pack>
-                            <groupId>org.wildfly</groupId>
-                            <artifactId>wildfly-ee-galleon-pack</artifactId>
-                        </feature-pack>
-                    </feature-packs>
-                    <channels>
-                        <channel>
-                            <manifest>
-                                <groupId>org.wildfly.channels</groupId>
-                                <artifactId>wildfly-ee</artifactId>
-                            </manifest>
-                        </channel>
-                    </channels>
-                    <layers>
-                        <layer>ee-core-profile-server</layer>
-                        <layer>jpa</layer>
-                        <layer>h2-default-datasource</layer>
-                        <layer>transactions</layer>
-                    </layers>
-                    <galleon-options>
-                        <jboss-fork-embedded>true</jboss-fork-embedded>
-                    </galleon-options>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>provision-server</id>
-                        <goals>
-                            <goal>provision</goal>
-                        </goals>
-                        <phase>process-test-resources</phase>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 

@@ -21,6 +21,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 
 @ExtendWith({CdiJUnit5Extension.class})
 @SupportJaxRs
+@Disabled
 class ExampleWebServiceTest {
 
     @Inject

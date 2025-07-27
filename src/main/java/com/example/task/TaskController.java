@@ -64,4 +64,17 @@ public class TaskController {
             throw new IllegalArgumentException("期限(dueDate)は今日以降の日付を指定してください。");
         }
     }
+
+    /**
+     * 全タスクの進捗率（完了/全体 * 100.0）を計算する
+     * @return 進捗率（パーセンテージ, 0.0～100.0）
+     */
+    public double calculateProgressRate() {
+        List<Task> allTasks = taskRepository.findAll();
+        if (allTasks.isEmpty()) {
+            return 0.0;
+        }
+        long completedCount = allTasks.stream().filter(Task::getCompleted).count();
+        return (completedCount * 100.0) / allTasks.size();
+    }
 }

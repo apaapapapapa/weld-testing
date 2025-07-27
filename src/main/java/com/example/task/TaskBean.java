@@ -85,6 +85,13 @@ public class TaskBean implements Serializable {
         return allTasks;
     }
 
+    /**
+     * 全タスクの進捗率（パーセンテージ, 0.0～100.0）を返す
+     */
+    public double getProgressRate() {
+        return controller.calculateProgressRate();
+    }
+
     private void addMessage(String message) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(message));
     }

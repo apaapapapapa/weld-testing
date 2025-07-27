@@ -118,6 +118,14 @@
             </div>
         </h:form>
 
+        <div class="mb-3">
+          <span class="badge bg-success fs-5">
+            進捗率:
+            <h:outputText value="#{taskBean.progressRate}">
+              <f:convertNumber type="number" maxFractionDigits="1" minFractionDigits="1"/>
+            </h:outputText>%
+          </span>
+        </div>
         <h:panelGroup id="outputGroup" layout="block">
             <div class="card shadow-sm">
                 <div class="card-header bg-secondary text-white section-header">
@@ -147,12 +155,12 @@
                         <h:column>
                             <f:facet name="header">Actions</f:facet>
                             <div class="table-actions">
-                                <button type="button" class="btn btn-sm btn-outline-warning" title="Edit" disabled>
+                                <span class="btn btn-sm btn-outline-warning disabled" title="Edit">
                                     <i class="bi bi-pencil"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" disabled>
+                                </span>
+                                <span class="btn btn-sm btn-outline-danger disabled" title="Delete">
                                     <i class="bi bi-trash"></i>
-                                </button>
+                                </span>
                             </div>
                         </h:column>
                     </h:dataTable>

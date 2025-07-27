@@ -11,8 +11,16 @@ import jakarta.persistence.EntityNotFoundException;
 @RequestScoped
 public class TaskController {
 
+    private final TaskRepository taskRepository;
+
     @Inject
-    TaskRepository taskRepository;
+    public TaskController(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    public TaskController() {
+        this.taskRepository = null;
+    }
 
     public List<Task> loadAll() {
         return taskRepository.findAll();

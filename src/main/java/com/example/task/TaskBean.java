@@ -16,10 +16,9 @@ import lombok.Setter;
 @ViewScoped
 public class TaskBean implements Serializable {
 
-    private List<Task> allTasks;
+    private transient List<Task> allTasks;
 
-    @Inject
-    private TaskController controller;
+    private final TaskController controller;
 
     @Getter
     @Setter
@@ -42,7 +41,14 @@ public class TaskBean implements Serializable {
         refresh();
     }
 
+    @Inject
+    public TaskBean(TaskController controller) {
+        this.controller = controller;
+    }
+
     public TaskBean() {
+        // Required by the framework (e.g., for proxying or serialization)
+        this.controller = null;
     }
 
     public void delete() {

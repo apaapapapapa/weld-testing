@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en"
+<html lang="en" xml:lang="ja"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
@@ -118,14 +118,15 @@
             </div>
         </h:form>
 
-        <div class="mb-3">
-          <span class="badge bg-success fs-5">
-            進捗率:
-            <h:outputText value="#{taskBean.progressRate}">
-              <f:convertNumber type="number" maxFractionDigits="1" minFractionDigits="1"/>
-            </h:outputText>%
-          </span>
-        </div>
+<div class="mb-3">
+  <label class="form-label fw-bold" for="progressRateBar">進捗率</label>
+  <progress id="progressRateBar" value="#{taskBean.progressRate}" max="100" style="width: 100%; height: 2rem; border-radius: 1rem;"></progress>
+  <span style="font-size: 1.1rem; margin-left: 0.5rem;">
+    <h:outputText value="#{taskBean.progressRate}">
+      <f:convertNumber type="number" maxFractionDigits="1" minFractionDigits="1"/>
+    </h:outputText>%
+  </span>
+</div>
         <h:panelGroup id="outputGroup" layout="block">
             <div class="card shadow-sm">
                 <div class="card-header bg-secondary text-white section-header">
@@ -166,7 +167,7 @@
                     </h:dataTable>
                 </div>
             </div>
-            <h:messages id="messages" styleClass="alert alert-info mt-3"/>
+            <h:messages id="messages" styleClass="alert alert-info mt-3" globalOnly="true" showDetail="true" showSummary="true"/>
         </h:panelGroup>
     </div>
 </h:body>

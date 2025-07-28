@@ -15,3 +15,5 @@ INSERT INTO Task (id, title, dueDate, completed, parent_id) VALUES (8, 'Beta - R
 -- サブタスク（Project Gamma の子）
 INSERT INTO Task (id, title, dueDate, completed, parent_id) VALUES (9, 'Gamma - Planning', '2025-08-11', false, 3);
 INSERT INTO Task (id, title, dueDate, completed, parent_id) VALUES (10, 'Gamma - Kickoff', '2025-08-12', false, 3);
+
+ALTER TABLE Task ALTER COLUMN id RESTART WITH 11;

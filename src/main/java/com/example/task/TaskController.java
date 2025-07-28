@@ -33,7 +33,7 @@ public class TaskController {
             return 0.0;
         }
         long highRiskCount = allTasks.stream()
-            .filter(t -> Boolean.FALSE.equals(t.getCompleted()))
+            .filter(t -> t.getCompleted() == null || !t.getCompleted())
             .filter(t -> {
                 java.time.LocalDate today = java.time.LocalDate.now();
                 java.time.LocalDate due = t.getDueDate();
@@ -52,7 +52,7 @@ public class TaskController {
         List<Task> allTasks = taskRepository.findAll();
         java.time.LocalDate today = java.time.LocalDate.now();
         return allTasks.stream()
-            .filter(t -> Boolean.FALSE.equals(t.getCompleted()))
+            .filter(t -> t.getCompleted() == null || !t.getCompleted())
             .filter(t -> {
                 java.time.LocalDate due = t.getDueDate();
                 return due != null && !due.isBefore(today) && !due.isAfter(today.plusDays(3));
@@ -147,7 +147,7 @@ public class TaskController {
             return 0.0;
         }
         long completedCount = allTasks.stream()
-            .filter(t -> Boolean.TRUE.equals(t.getCompleted()))
+            .filter(t -> t.getCompleted() != null && t.getCompleted())
             .count();
         return (completedCount * 100.0) / allTasks.size();
     }

@@ -35,6 +35,9 @@
               <div class="card-header bg-primary text-white section-header">
                 <i class="bi bi-plus-circle section-icon"></i>
                 Add Task
+                <span class="ms-2" title="新しいタスクを追加します">
+                  <i class="bi bi-info-circle" style="cursor: pointer;"></i>
+                </span>
               </div>
               <div class="card-body">
                 <div class="row g-2 align-items-center mb-2">
@@ -72,10 +75,13 @@
           <!-- タスク削除フォーム -->
           <h:form id="form-delete">
             <div class="card shadow-sm border-danger">
-              <div class="card-header bg-danger text-white section-header">
-                <i class="bi bi-trash section-icon"></i>
-                Delete Task
-              </div>
+            <div class="card-header bg-danger text-white section-header">
+              <i class="bi bi-trash section-icon"></i>
+              Delete Task
+              <span class="ms-2" title="タスクIDを指定してタスクを削除します">
+                <i class="bi bi-info-circle" style="cursor: pointer;"></i>
+              </span>
+            </div>
               <div class="card-body">
                 <div class="row g-2 align-items-center mb-2">
                   <div class="col-auto">
@@ -323,6 +329,9 @@
                     <span class="badge #{row.completed ? 'bg-success' : 'bg-secondary'} fs-5">
                       #{row.completed ? 'Completed' : 'Incomplete'}
                     </span>
+                    <h:outputText rendered="#{row.trulyCompleted}" >
+                      <span class="badge bg-info ms-2 fs-6">Truly Completed</span>
+                    </h:outputText>
                   </h:column>
                 </h:dataTable>
               </div>

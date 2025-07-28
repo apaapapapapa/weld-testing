@@ -1,5 +1,6 @@
 package com.example.task;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +36,8 @@ public class TaskController {
         long highRiskCount = allTasks.stream()
             .filter(t -> t.getCompleted() == null || !t.getCompleted())
             .filter(t -> {
-                java.time.LocalDate today = java.time.LocalDate.now();
-                java.time.LocalDate due = t.getDueDate();
+                LocalDate today = LocalDate.now();
+                LocalDate due = t.getDueDate();
                 return due != null && !due.isBefore(today) && !due.isAfter(today.plusDays(3));
             })
             .count();
@@ -50,11 +51,11 @@ public class TaskController {
      */
     public List<Task> findHighRiskTasks() {
         List<Task> allTasks = taskRepository.findAll();
-        java.time.LocalDate today = java.time.LocalDate.now();
+        LocalDate today = LocalDate.now();
         return allTasks.stream()
             .filter(t -> t.getCompleted() == null || !t.getCompleted())
             .filter(t -> {
-                java.time.LocalDate due = t.getDueDate();
+                LocalDate due = t.getDueDate();
                 return due != null && !due.isBefore(today) && !due.isAfter(today.plusDays(3));
             })
             .toList();
@@ -65,7 +66,7 @@ public class TaskController {
     }
 
     // サブタスク: 親タスクIDを指定して子タスクを追加
-    public Task addSubtask(int parentId, String title, java.time.LocalDate dueDate, boolean completed) {
+    public Task addSubtask(int parentId, String title, LocalDate dueDate, boolean completed) {
         validateTaskInput(title, dueDate);
 
         Task parent = taskRepository.findById(parentId)
@@ -90,7 +91,7 @@ public class TaskController {
         return taskRepository.findRootTasks();
     }
 
-    public Task add(String title, java.time.LocalDate dueDate, boolean completed) {
+    public Task add(String title, LocalDate dueDate, boolean completed) {
         validateTaskInput(title, dueDate);
 
         final Task newTask = new Task();
@@ -116,7 +117,7 @@ public class TaskController {
         
     }
 
-    public Task update(int id, String title, java.time.LocalDate dueDate, boolean completed) {
+    public Task update(int id, String title, LocalDate dueDate, boolean completed) {
         validateTaskInput(title, dueDate);
         try {
             return taskRepository.update(id, title, dueDate, completed);
@@ -125,14 +126,14 @@ public class TaskController {
         }
     }
 
-    private void validateTaskInput(String title, java.time.LocalDate dueDate) {
+    private void validateTaskInput(String title, LocalDate dueDate) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("タイトルは必須です。");
         }
         if (dueDate == null) {
             throw new IllegalArgumentException("期限(dueDate)は必須です。");
         }
-        if (dueDate.isBefore(java.time.LocalDate.now())) {
+        if (dueDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("期限(dueDate)は今日以降の日付を指定してください。");
         }
     }

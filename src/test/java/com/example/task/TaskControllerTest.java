@@ -36,6 +36,7 @@ class TaskControllerTest {
     private static final double PROGRESS_FULL = 100.0;
     private static final double PROGRESS_ONE_THIRD = 33.3333;
     private static final double PROGRESS_TWO_THIRD = 66.6666;
+    private static final double DELAY_RISK_ZERO = 0.0;
     private static final double DELAY_RISK_HALF = 50.0;
     private static final double DELTA_STRICT = 0.0001;
     private static final double DELTA_TOLERANT = 0.01;
@@ -156,7 +157,7 @@ class TaskControllerTest {
             LocalDate today = LocalDate.now();
             return Stream.of(
                 Arguments.of(
-                    Collections.emptyList(), PROGRESS_ZERO, "遅延リスク高タスク割合: タスク0件は0.0"
+                    Collections.emptyList(), DELAY_RISK_ZERO, "遅延リスク高タスク割合: タスク0件は0.0"
                 ),
                 Arguments.of(
                     Arrays.asList(
@@ -165,20 +166,20 @@ class TaskControllerTest {
                         TaskFactory.taskWithDue(true, today.plusDays(1)),
                         TaskFactory.taskWithDue(false, today.plusDays(5))
                     ),
-                    DELAY_RISK_HALF, "遅延リスク高タスク割合: 条件に合うタスクが複数"
+                    DELAY_RISK_HALF, "遅延リスク高タスク割合: 条件に合うタスクが半分"
                 ),
                 Arguments.of(
                     Arrays.asList(
                         TaskFactory.taskWithDue(true, today.plusDays(1)),
                         TaskFactory.taskWithDue(true, today.plusDays(2))
                     ),
-                    PROGRESS_ZERO, "遅延リスク高タスク割合: すべて完了済み"
+                    DELAY_RISK_ZERO, "遅延リスク高タスク割合: すべて完了済み"
                 ),
                 Arguments.of(
                     Arrays.asList(
                         TaskFactory.taskWithDue(false, today.plusDays(10))
                     ),
-                    PROGRESS_ZERO, "遅延リスク高タスク割合: 期日が範囲外"
+                    DELAY_RISK_ZERO, "遅延リスク高タスク割合: 期日が範囲外"
                 )
             );
         }

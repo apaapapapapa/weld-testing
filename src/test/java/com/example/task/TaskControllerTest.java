@@ -75,7 +75,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系][境界値] calculateProgressRateのテスト")
+    @DisplayName("calculateProgressRateのテスト")
     class CalculateProgressRateTests {
 
         @ParameterizedTest(name = "{index}: {3}")

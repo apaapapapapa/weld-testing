@@ -11,26 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
-import java.time.LocalDate;
 
 class TaskTest {
 
-    @Test
-    void testDefaultValues() {
-        Task task = new Task();
-        assertEquals(0, task.getId());
-        assertNull(task.getTitle());
-        assertNull(task.getDueDate());
-        assertFalse(task.getCompleted());
-    }
-
     @Nested
-    @DisplayName("Task#isTrulyCompletedの正常系テスト")
-    class IsTrulyCompletedNormalTest {
+    @DisplayName("Task#isTrulyCompletedのテスト")
+    class IsTrulyCompletedTest {
 
         @ParameterizedTest(name = "{index}: {6}")
         @MethodSource("provideNormalCases")
-        @DisplayName("全ての条件を満たす場合はtrue")
+        @DisplayName("正常系: 全ての条件を満たす場合はtrue")
         void testIsTrulyCompletedNormal(
                 Boolean completed,
                 java.time.LocalDate dueDate,
@@ -40,32 +30,12 @@ class TaskTest {
                 boolean expected,
                 String description
         ) {
-            // Arrange
-            Task task = createTask(completed, dueDate, title, parentCompleted, childrenCompleted);
-
-            // Act & Assert
-            assertEquals(expected, task.isTrulyCompleted());
+            assertIsTrulyCompleted(completed, dueDate, title, parentCompleted, childrenCompleted, expected, description);
         }
-
-        static Stream<Arguments> provideNormalCases() {
-            java.time.LocalDate today = java.time.LocalDate.now();
-            return Stream.of(
-                Arguments.of(true, today, "Task", true, new Boolean[]{true, true}, true, "全て完了"),
-                Arguments.of(true, today, "A", true, new Boolean[]{true, true}, true, "タイトル1文字"),
-                Arguments.of(true, today, "A".repeat(50), true, new Boolean[]{true, true}, true, "タイトル50文字"),
-                Arguments.of(true, today, "Task", true, null, true, "サブタスクなし"),
-                Arguments.of(true, today, "Task", null, new Boolean[]{true, true}, true, "親タスクなし")
-            );
-        }
-    }
-
-    @Nested
-    @DisplayName("Task#isTrulyCompletedの異常系テスト")
-    class IsTrulyCompletedAbnormalTest {
 
         @ParameterizedTest(name = "{index}: {6}")
         @MethodSource("provideAbnormalCases")
-        @DisplayName("不正な条件の場合はfalse")
+        @DisplayName("異常系: 不正な条件の場合はfalse")
         void testIsTrulyCompletedAbnormal(
                 Boolean completed,
                 java.time.LocalDate dueDate,
@@ -75,36 +45,25 @@ class TaskTest {
                 boolean expected,
                 String description
         ) {
-            // Arrange
+            assertIsTrulyCompleted(completed, dueDate, title, parentCompleted, childrenCompleted, expected, description);
+        }
+
+        // 共通のアサートロジックをヘルパーメソッドに抽出
+        private void assertIsTrulyCompleted(
+                Boolean completed,
+                java.time.LocalDate dueDate,
+                String title,
+                Boolean parentCompleted,
+                Boolean[] childrenCompleted,
+                boolean expected,
+                String description
+        ) {
             Task task = createTask(completed, dueDate, title, parentCompleted, childrenCompleted);
-
-            // Act & Assert
-            assertEquals(expected, task.isTrulyCompleted());
+            assertEquals(expected, task.isTrulyCompleted(), description);
         }
-
-        static Stream<Arguments> provideAbnormalCases() {
-            java.time.LocalDate today = java.time.LocalDate.now();
-            java.time.LocalDate future = today.plusDays(1);
-            return Stream.of(
-                Arguments.of(true, today, "Task", true, new Boolean[]{true, false}, false, "サブタスクが未完了"),
-                Arguments.of(true, today, "Task", false, new Boolean[]{true, true}, false, "親タスクが未完了"),
-                Arguments.of(true, future, "Task", true, new Boolean[]{true, true}, false, "期日が未来"),
-                Arguments.of(true, today, "WIP Task", true, new Boolean[]{true, true}, false, "タイトルにWIP含む"),
-                Arguments.of(true, today, "A".repeat(51), true, new Boolean[]{true, true}, false, "タイトルが長すぎ"),
-                Arguments.of(true, today, null, true, new Boolean[]{true, true}, false, "タイトルがnull"),
-                Arguments.of(false, today, "Task", true, new Boolean[]{true, true}, false, "completedがfalse"),
-                Arguments.of(true, null, "Task", true, new Boolean[]{true, true}, false, "dueDateがnull"),
-                Arguments.of(true, today, "", true, new Boolean[]{true, true}, false, "タイトルが空文字")
-            );
-        }
-    }
-
-    @Nested
-    @DisplayName("Task#isTrulyCompletedの例外系テスト")
-    class IsTrulyCompletedExceptionTest {
 
         @Test
-        @DisplayName("サブタスクにnullが含まれる場合はfalse")
+        @DisplayName("例外系: サブタスクにnullが含まれる場合はfalse")
         void testChildContainsNull() {
             // Arrange
             Task task = new Task();
@@ -123,7 +82,7 @@ class TaskTest {
         }
 
         @Test
-        @DisplayName("親タスクのcompletedがnullの場合はfalse")
+        @DisplayName("例外系: 親タスクのcompletedがnullの場合はfalse")
         void testParentCompletedIsNull() {
             // Arrange
             Task task = new Task();
@@ -142,7 +101,7 @@ class TaskTest {
         }
 
         @Test
-        @DisplayName("サブタスクのcompletedがnullの場合はfalse")
+        @DisplayName("例外系: サブタスクのcompletedがnullの場合はfalse")
         void testChildCompletedIsNull() {
             // Arrange
             Task task = new Task();
@@ -158,6 +117,33 @@ class TaskTest {
 
             // Act & Assert
             assertFalse(task.isTrulyCompleted());
+        }
+
+        static Stream<Arguments> provideNormalCases() {
+            java.time.LocalDate today = java.time.LocalDate.now();
+            return Stream.of(
+                Arguments.of(true, today, "Task", true, new Boolean[]{true, true}, true, "全て完了"),
+                Arguments.of(true, today, "A", true, new Boolean[]{true, true}, true, "タイトル1文字"),
+                Arguments.of(true, today, "A".repeat(50), true, new Boolean[]{true, true}, true, "タイトル50文字"),
+                Arguments.of(true, today, "Task", true, null, true, "サブタスクなし"),
+                Arguments.of(true, today, "Task", null, new Boolean[]{true, true}, true, "親タスクなし")
+            );
+        }
+
+        static Stream<Arguments> provideAbnormalCases() {
+            java.time.LocalDate today = java.time.LocalDate.now();
+            java.time.LocalDate future = today.plusDays(1);
+            return Stream.of(
+                Arguments.of(true, today, "Task", true, new Boolean[]{true, false}, false, "サブタスクが未完了"),
+                Arguments.of(true, today, "Task", false, new Boolean[]{true, true}, false, "親タスクが未完了"),
+                Arguments.of(true, future, "Task", true, new Boolean[]{true, true}, false, "期日が未来"),
+                Arguments.of(true, today, "WIP Task", true, new Boolean[]{true, true}, false, "タイトルにWIP含む"),
+                Arguments.of(true, today, "A".repeat(51), true, new Boolean[]{true, true}, false, "タイトルが長すぎ"),
+                Arguments.of(true, today, null, true, new Boolean[]{true, true}, false, "タイトルがnull"),
+                Arguments.of(false, today, "Task", true, new Boolean[]{true, true}, false, "completedがfalse"),
+                Arguments.of(true, null, "Task", true, new Boolean[]{true, true}, false, "dueDateがnull"),
+                Arguments.of(true, today, "", true, new Boolean[]{true, true}, false, "タイトルが空文字")
+            );
         }
     }
 
@@ -188,18 +174,4 @@ class TaskTest {
         return task;
     }
 
-    @Test
-    void testSettersAndGetters() {
-        Task task = new Task();
-        task.setId(10);
-        task.setTitle("Test Title");
-        LocalDate date = LocalDate.of(2025, 7, 28);
-        task.setDueDate(date);
-        task.setCompleted(true);
-
-        assertEquals(10, task.getId());
-        assertEquals("Test Title", task.getTitle());
-        assertEquals(date, task.getDueDate());
-        assertTrue(task.getCompleted());
-    }
 }

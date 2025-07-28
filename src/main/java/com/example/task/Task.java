@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Entity
@@ -29,7 +30,7 @@ public class Task {
     private String title;
 
     @Column
-    private java.time.LocalDate dueDate;
+    private LocalDate dueDate;
 
     @Column
     private Boolean completed = false;
@@ -76,7 +77,7 @@ public class Task {
     }
 
     private boolean isDueDateValid() {
-        return dueDate != null && !dueDate.isAfter(java.time.LocalDate.now());
+        return dueDate != null && !dueDate.isAfter(LocalDate.now());
     }
 
     private boolean isTitleValid() {

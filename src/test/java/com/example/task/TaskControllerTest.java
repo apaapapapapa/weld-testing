@@ -141,7 +141,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系][境界値] calculateDelayRiskRateのテスト")
+    @DisplayName("calculateDelayRiskRateのテスト")
     class CalculateDelayRiskRateTests {
 
         @ParameterizedTest(name = "{index}: {2}")
@@ -186,7 +186,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系] findHighRiskTasksのテスト")
+    @DisplayName("findHighRiskTasksのテスト")
     class FindHighRiskTasksTests {
 
         @Test
@@ -207,7 +207,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系] loadAllのテスト")
+    @DisplayName("loadAllのテスト")
     class LoadAllTests {
 
         @Test
@@ -225,7 +225,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系][異常系] addのテスト")
+    @DisplayName("addのテスト")
     class AddTests {
 
         @Test
@@ -262,7 +262,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系][例外系] deleteのテスト")
+    @DisplayName("deleteのテスト")
     class DeleteTests {
         @Test
         @DisplayName("[正常系] タスク削除: 正常系")
@@ -286,7 +286,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系][異常系][例外系] updateのテスト")
+    @DisplayName("updateのテスト")
     class UpdateTests {
         @Test
         @DisplayName("[正常系] タスク更新: 正常系")
@@ -331,7 +331,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系][異常系][例外系] addSubtaskのテスト")
+    @DisplayName("addSubtaskのテスト")
     class AddSubtaskTests {
         @Test
         @DisplayName("[正常系] サブタスク追加: 正常系")
@@ -387,7 +387,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系] findSubtasksのテスト")
+    @DisplayName("findSubtasksのテスト")
     class FindSubtasksTests {
         @Test
         @DisplayName("[正常系] 親IDに紐づく子タスクが正しく返る")
@@ -414,7 +414,7 @@ class TaskControllerTest {
     }
 
     @Nested
-    @DisplayName("[正常系] findRootTasksのテスト")
+    @DisplayName("findRootTasksのテスト")
     class FindRootTasksTests {
         @Test
         @DisplayName("[正常系] ルートタスクが正しく返る")

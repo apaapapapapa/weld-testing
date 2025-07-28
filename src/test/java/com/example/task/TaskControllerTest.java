@@ -133,7 +133,7 @@ class TaskControllerTest {
                         TaskFactory.task(null, null),
                         TaskFactory.incompleteTask()
                     ),
-                    PROGRESS_ONE_THIRD, DELTA_TOLERANT, "completedがnullのタスクが混在する場合"
+                    PROGRESS_ONE_THIRD, DELTA_TOLERANT, "completedがnullのタスクが混在する場合はカウントされない"
                 )
             );
         }

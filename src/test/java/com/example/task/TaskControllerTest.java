@@ -86,7 +86,7 @@ class TaskControllerTest {
 
             double actual = controller.calculateProgressRate();
             
-            assertEquals(expected, actual, delta, description);
+            assertEquals(expected, actual, delta);
         }
 
         static Stream<Arguments> provideTasksForProgressRate() {
@@ -149,7 +149,7 @@ class TaskControllerTest {
         void testCalculateDelayRiskRate(List<Task> tasks, double expected, String description) {
             when(mockRepository.findAll()).thenReturn(tasks);
             double actual = controller.calculateDelayRiskRate();
-            assertEquals(expected, actual, DELTA_STRICT, description);
+            assertEquals(expected, actual, DELTA_STRICT);
         }
 
         static Stream<Arguments> provideTasksForDelayRiskRate() {

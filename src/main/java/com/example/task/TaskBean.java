@@ -1,6 +1,7 @@
 package com.example.task;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct;
@@ -32,7 +33,7 @@ public class TaskBean implements Serializable {
 
     @Getter
     @Setter
-    private java.time.LocalDate dueDate;
+    private LocalDate dueDate;
 
     @Getter
     @Setter
@@ -50,7 +51,7 @@ public class TaskBean implements Serializable {
 
     @Getter
     @Setter
-    private java.time.LocalDate subtaskDueDate;
+    private LocalDate subtaskDueDate;
 
     @Getter
     @Setter

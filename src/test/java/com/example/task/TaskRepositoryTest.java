@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,7 @@ class TaskRepositoryTest {
 
         Task task2 = new Task();
         task2.setTitle("task2");
+        task2.setCompleted(true);
         taskRepository.create(task2);
 
         entityManager.getTransaction().commit();
@@ -90,7 +92,7 @@ class TaskRepositoryTest {
         entityManager.getTransaction().begin(); 
 
         // 既存のdueDateとcompleted値を仮で指定（必要に応じて修正）
-        java.time.LocalDate dueDate = java.time.LocalDate.of(2025, 7, 31);
+        LocalDate dueDate = LocalDate.of(2025, 7, 31);
         boolean completed = false;
         Task updatedTask = taskRepository.update(1, "updatedTask", dueDate, completed);
         assertNotNull(updatedTask);

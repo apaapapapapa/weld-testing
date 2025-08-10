@@ -1,219 +1,211 @@
 package com.example.task;
 
 import com.example.util.MockFacesContext;
-import com.github.database.rider.core.api.dataset.DataSet;
-import com.github.database.rider.junit5.api.DBRider;
 
-import io.github.cdiunit.AdditionalClasses;
 import io.github.cdiunit.InRequestScope;
-import io.github.cdiunit.junit5.CdiJUnit5Extension;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.inject.Produces;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Persistence;
-import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
- * TaskBean のテストクラス.
+ * TasktaskBean のテストクラス.
  */
-@ExtendWith({CdiJUnit5Extension.class})
-@AdditionalClasses({TaskController.class, TaskRepository.class})
-class TaskBeanTest {
+@ExtendWith(MockitoExtension.class)
+class TasktaskBeanTest {
 
-    @Produces
-    @RequestScoped
-    EntityManager createEntityManager() {
-        return Persistence.createEntityManagerFactory("TaskPersistenceUnit").createEntityManager();
-    }
-
-    // --- 追加: getter系の個別テスト ---
-
-    @Test
-    void testGetProgressRate() {
-        // Arrange
-        TaskController mockController = mock(TaskController.class);
-        when(mockController.calculateProgressRate()).thenReturn(55.5);
-
-        TaskBean bean = new TaskBean();
-        try {
-            java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
-            controllerField.setAccessible(true);
-            controllerField.set(bean, mockController);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        // Act & Assert
-        assertEquals(55.5, bean.getProgressRate());
-    }
-
-    @Test
-    void testGetDelayRiskRate() {
-        // Arrange
-        TaskController mockController = mock(TaskController.class);
-        when(mockController.calculateDelayRiskRate()).thenReturn(23.4);
-
-        TaskBean bean = new TaskBean();
-        try {
-            java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
-            controllerField.setAccessible(true);
-            controllerField.set(bean, mockController);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        // Act & Assert
-        assertEquals(23.4, bean.getDelayRiskRate());
-    }
-
-    @Test
-    void testGetHighRiskTasks() {
-        // Arrange
-        TaskController mockController = mock(TaskController.class);
-        List<Task> highRiskTasks = List.of(new Task());
-        when(mockController.findHighRiskTasks()).thenReturn(highRiskTasks);
-
-        TaskBean bean = new TaskBean();
-        try {
-            java.lang.reflect.Field controllerField = TaskBean.class.getDeclaredField("controller");
-            controllerField.setAccessible(true);
-            controllerField.set(bean, mockController);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        // Act & Assert
-        assertEquals(highRiskTasks, bean.getHighRiskTasks());
-    }
-
-    @Inject
-    TaskController taskController;
-
-    @Inject
-    TaskRepository taskRepository;
+    @Mock
+    TaskController controller;
 
     private FacesContext facesContext;
 
     private TaskBean taskBean;
 
     @BeforeEach
+    @InRequestScope
     void setUp() {
 
-        // Mock FacesContext
+        taskBean = new TaskBean(controller);
+
         facesContext = MockFacesContext.mock();
-
-        taskBean = new TaskBean();
-        // フィールドインジェクションの代用
-        java.lang.reflect.Field controllerField = null;
-        try {
-            controllerField = TaskBean.class.getDeclaredField("controller");
-            controllerField.setAccessible(true);
-            controllerField.set(taskBean, taskController);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     @AfterEach
     void tearDown() {
-
         facesContext.release();
     }
 
-    /**
-     * TaskBean の add() メソッドのテスト.
-     */
-    @InRequestScope
-    @Transactional
-    @DBRider
-    //@DataSet(value = "datasets/empty-tasks.yml", transactional = true) // テスト前に tasks テーブルを空にする
-    @Disabled
-    void testAddTask() {
+    @Test
+    void postConstruct_callsRefresh_andLoadsAll() {
+        var tasks = List.of(new Task(), new Task());
+        when(controller.loadAll()).thenReturn(tasks);
 
-        // Arrange
-        String taskTitle = "新しいタスク";
-        taskBean.setTitle(taskTitle);
+        taskBean.postConstruct();
 
-        // Act
+        assertEquals(tasks, taskBean.getAllTasks());
+        verify(controller, times(1)).loadAll();
+    }
+
+    @Test
+    void add_callsControllerAdd_refreshes_andShowsMessage() {
+        taskBean.setTitle("T-1");
+        taskBean.setDueDate(LocalDate.of(2025, 8, 1));
+        taskBean.setCompleted(true);
+
+        when(controller.loadAll()).thenReturn(List.of());
+
         taskBean.add();
 
-        // Assert
-        List<Task> allTasks = taskBean.getAllTasks();
-        assertNotNull(allTasks);
-        assertEquals(1, allTasks.size());
-        assertEquals(taskTitle, allTasks.get(0).getTitle());
+        verify(controller).add(eq("T-1"), eq(LocalDate.of(2025, 8, 1)), eq(true));
+        verify(controller).loadAll();
 
-        verify(facesContext).addMessage(eq(null), argThat(message ->
-                message.getSummary().equals("Task with title " + taskTitle + " created")));
+        var msgCaptor = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(facesContext).addMessage(eq(null), msgCaptor.capture());
+        assertTrue(msgCaptor.getValue().getSummary().contains("Task with title T-1 created"));
     }
 
-    /**
-     * TaskBean の delete() メソッドのテスト. 
-     */
-    @InRequestScope
-    @Transactional
-    @DBRider
-    @DataSet(value = "datasets/existing-tasks.yml", transactional = true) // テスト前に既存のタスクをロード
-    @Disabled
-    void testDeleteTask() {
+    @Test
+    void add_whenControllerThrows_showsErrorMessage() {
+        taskBean.setTitle("Oops");
+        doThrow(new RuntimeException("boom")).when(controller).add(any(), any(), anyBoolean());
 
-        // Arrange
-        int taskId = 1;
-        taskBean.setId(taskId);
+        taskBean.add();
 
-        // Act
-        taskBean.delete();
-
-        // Assert
-        List<Task> allTasks = taskBean.getAllTasks();
-        
-        assertNotNull(allTasks);
-        assertEquals(1, allTasks.size());
-        assertEquals("初期タスク2", allTasks.get(0).getTitle());
-
-        verify(facesContext).addMessage(eq(null), argThat(message ->
-                message.getSummary().equals("Task " + taskId + " deleted")));
+        var msgCaptor = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(facesContext).addMessage(eq(null), msgCaptor.capture());
+        assertTrue(msgCaptor.getValue().getSummary().startsWith("Error adding a new Task."));
+        // 失敗時は refresh(loadAll) が呼ばれないこと（runWithMessage内のactionが例外で中断）
+        verify(controller, never()).loadAll();
     }
 
-    /**
-     * TaskBean の update() メソッドのテスト.
-     */
-    @InRequestScope
-    @Transactional
-    @DBRider
-    @DataSet(value = "datasets/existing-tasks.yml", transactional = true)
-    @Disabled
-    void testUpdateTask() {
-        // Arrange
-        int taskId = 1;
-        String updatedTitle = "更新されたタスクタイトル";
-        taskBean.setId(taskId);
-        taskBean.setTitle(updatedTitle);
+    @Test
+    void update_callsControllerUpdate_refreshes_andShowsMessage() {
+        taskBean.setId(10);
+        taskBean.setTitle("Renamed");
+        taskBean.setDueDate(LocalDate.of(2025, 8, 2));
+        taskBean.setCompleted(false);
+        when(controller.loadAll()).thenReturn(List.of());
 
-        // Act
         taskBean.update();
 
-        // Assert
-        List<Task> allTasks = taskBean.getAllTasks();
-        assertNotNull(allTasks);
-        assertEquals(2, allTasks.size());
-        assertEquals(updatedTitle, allTasks.get(0).getTitle());
+        verify(controller).update(10, "Renamed", LocalDate.of(2025, 8, 2), false);
+        verify(controller).loadAll();
 
-        verify(facesContext).addMessage(eq(null), argThat(message ->
-                message.getSummary().equals("Task " + taskId + " updated")));
+        var cap = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(facesContext).addMessage(eq(null), cap.capture());
+        assertEquals("Task 10 updated", cap.getValue().getSummary());
+    }
+
+    @Test
+    void delete_callsControllerDelete_refreshes_andShowsMessage() {
+        taskBean.setId(5);
+        when(controller.loadAll()).thenReturn(List.of());
+
+        taskBean.delete();
+
+        verify(controller).delete(5);
+        verify(controller).loadAll();
+
+        var cap = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(facesContext).addMessage(eq(null), cap.capture());
+        assertEquals("Task 5 deleted", cap.getValue().getSummary());
+    }
+
+    @Test
+    void deleteById_callsControllerDelete_refreshes_andShowsMessage() {
+        when(controller.loadAll()).thenReturn(List.of());
+
+        taskBean.deleteById(7);
+
+        verify(controller).delete(7);
+        verify(controller).loadAll();
+
+        var cap = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(facesContext).addMessage(eq(null), cap.capture());
+        assertEquals("Task 7 deleted", cap.getValue().getSummary());
+    }
+
+    @Test
+    void addSubtask_callsControllerAddSubtask_clearsForm_andShowsMessage() {
+        taskBean.setParentId(100);
+        taskBean.setSubtaskTitle("Sub A");
+        taskBean.setSubtaskDueDate(LocalDate.of(2025, 9, 1));
+        taskBean.setSubtaskCompleted(true);
+        when(controller.loadAll()).thenReturn(List.of());
+
+        taskBean.addSubtask();
+
+        verify(controller).addSubtask(100, "Sub A", LocalDate.of(2025, 9, 1), true);
+        verify(controller).loadAll();
+
+        // メッセージ
+        var cap = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(facesContext).addMessage(eq(null), cap.capture());
+        assertTrue(cap.getValue().getSummary().contains("Subtask with title Sub A created (parentId=100)"));
+
+        // フォーム値クリア
+        assertNull(taskBean.getSubtaskTitle());
+        assertNull(taskBean.getSubtaskDueDate());
+        assertFalse(taskBean.isSubtaskCompleted());
+        assertNull(taskBean.getParentId());
+    }
+
+    @Test
+    void proxyMethods_delegateToController() {
+        // root tasks
+        var roots = List.of(new Task());
+        when(controller.findRootTasks()).thenReturn(roots);
+        assertEquals(roots, taskBean.getRootTasks());
+        assertEquals(roots, taskBean.getRootTasksProperty());
+        verify(controller, times(2)).findRootTasks();
+
+        // subtasks by id
+        var subs = List.of(new Task(), new Task());
+        when(controller.findSubtasks(42)).thenReturn(subs);
+        assertEquals(subs, taskBean.getSubtasks(42));
+        verify(controller).findSubtasks(42);
+
+        // subtasks by Task
+        Task parent = new Task();
+        parent.setId(42);
+        assertEquals(subs, taskBean.getSubtasks(parent));
+        verify(controller, times(2)).findSubtasks(42);
+
+        // null parent -> null
+        assertNull(taskBean.getSubtasks((Task) null));
+
+        // progress / risk / high risk list
+        when(controller.calculateProgressRate()).thenReturn(77.5);
+        when(controller.calculateDelayRiskRate()).thenReturn(12.5);
+        when(controller.findHighRiskTasks()).thenReturn(List.of(new Task()));
+
+        assertEquals(77.5, taskBean.getProgressRate(), 0.0001);
+        assertEquals(12.5, taskBean.getDelayRiskRate(), 0.0001);
+        assertEquals(1, taskBean.getHighRiskTasks().size());
+    }
+
+    @Test
+    void refresh_updatesAllTasksFromController() {
+        var tasks = List.of(new Task());
+        when(controller.loadAll()).thenReturn(tasks);
+
+        taskBean.refresh();
+
+        assertEquals(tasks, taskBean.getAllTasks());
+        verify(controller).loadAll();
     }
 
 }

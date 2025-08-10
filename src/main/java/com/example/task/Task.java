@@ -24,12 +24,12 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column
     private String title;
 
-    @Column
+    @Column(name = "due_date")
     private LocalDate dueDate;
 
     @Column

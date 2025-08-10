@@ -4,4 +4,4 @@ Task:
     completed: false
   - id: 2
     title: "task2"
-    completed: false
+    completed: true
